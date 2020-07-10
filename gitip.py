@@ -4,27 +4,30 @@ import urllib.request
 import os
 import sys
 
-
-
 # 140.82.114.4 github.com
 # 199.232.5.194 github.global.ssl.fastly.net
 # 140.82.112.9 codeload.github.com
 # 52.216.237.203 github-cloud.s3.amazonaws.com
 regex = re.compile(r"\<li\>(\d+\.\d+\.\d+\.\d+)\<\/li\>")
 regex_etc = re.compile(r"\d+\.\d+\.\d+\.\d+\s+(.+)")
-HOTS = ("github.com", "github.global.ssl.fastly.net", "codeload.github.com", "github-cloud.s3.amazonaws.com")
+HOTS = ("github.com", "github.global.ssl.fastly.net", "codeload.github.com",
+        "github-cloud.s3.amazonaws.com")
 GITHUB_HOST = {
-    "github.com": "https://github.com.ipaddress.com",
-    "github.global.ssl.fastly.net": "https://fastly.net.ipaddress.com/github.global.ssl.fastly.net",
-    "codeload.github.com": "https://github.com.ipaddress.com/codeload.github.com",
-    "github-cloud.s3.amazonaws.com": "https://amazonaws.com.ipaddress.com/github-cloud.s3.amazonaws.com",
+    "github.com":
+    "https://github.com.ipaddress.com",
+    "github.global.ssl.fastly.net":
+    "https://fastly.net.ipaddress.com/github.global.ssl.fastly.net",
+    "codeload.github.com":
+    "https://github.com.ipaddress.com/codeload.github.com",
+    "github-cloud.s3.amazonaws.com":
+    "https://amazonaws.com.ipaddress.com/github-cloud.s3.amazonaws.com",
 }
 
 
 def fetch_url(url='https://github.com.ipaddress.com/'):
     with urllib.request.urlopen(url) as f:
         text = f.read()
-        html=etree.HTML(text)
+        html = etree.HTML(text)
         a = html.xpath("//ul[@class='comma-separated']")
         for b in a:
             tmp = etree.tostring(b[0]).decode('utf-8')
@@ -53,8 +56,8 @@ def do_work(etc_host="/etc/host"):
                 if host_name in HOTS:
                     ip = result.get(host_name)
                     if ip is not None:
-                       tmp_lines[index] = "%s %s\n" % (ip, host_name)
-                       poped.append(host_name)
+                        tmp_lines[index] = "%s %s\n" % (ip, host_name)
+                        poped.append(host_name)
     print(result)
     for key in result:
         if result.get(key) is not None and key not in poped:
