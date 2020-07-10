@@ -67,9 +67,11 @@ def do_work(etc_host="/etc/host"):
 
 
 if __name__ == "__main__":
-    if sys.platform == "win32":
-        do_work(etc_host=r"C:/Windows/System32/drivers/etc/hosts")
-        print(os.system("ipconfig /flushdns"))
-    else:
-        do_work(etc_host=r"/etc/hosts")
+    # if sys.platform == "win32":
+    #     do_work(etc_host=r"C:/Windows/System32/drivers/etc/hosts")
+    #     print(os.system("ipconfig /flushdns"))
+    # else:
+    #     do_work(etc_host=r"/etc/hosts")
         # print(os.system("service networking restart"))
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    print(BASE_DIR)
