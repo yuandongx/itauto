@@ -18,5 +18,13 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include("apps.home.urls")),
+    path('apps/', include("apps.apps.urls")),
+    path('config/', include("apps.config.urls")),
+    path('controller/', include("apps.controller.urls")),
+    path('home/', include("apps.home.urls")),
+    path('hosts/', include("apps.hosts.urls")),
+    path('notify/', include("apps.notify.urls")),
+    path('schedule/', include("apps.schedule.urls")),
+    path('system/', include("apps.system.urls")),
     path('admin/', admin.site.urls),
 ]
