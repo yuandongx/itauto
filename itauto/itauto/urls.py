@@ -26,5 +26,6 @@ urlpatterns = [
     path('notify/', include("apps.notify.urls")),
     path('schedule/', include("apps.schedule.urls")),
     path('system/', include("apps.system.urls")),
+    path('monitor/', include("apps.monitor.urls")),
     path('admin/', admin.site.urls),
 ]
