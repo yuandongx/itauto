@@ -6,4 +6,4 @@ from django.shortcuts import render
 # Create your views here.
  
 def index(request):
-    return render(request, "workbench/main.md")
+    return render(request, "home/main.html")

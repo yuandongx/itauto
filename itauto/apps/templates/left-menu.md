@@ -1,8 +1,6 @@
 
-{% extends "../base.html" %}
 {% load static %}
-{% block left_menu %}
-<li><a href="home"  class="active"><i class="lnr lnr-home"></i> <span>工作台</span></a></li>
+<li><a href="home"  class=""><i class="lnr lnr-home"></i> <span>工作台</span></a></li>
 <li><a href="hosts"  class=""><i class="lnr lnr-code"></i> <span>主机管理</span></a></li>
 <li>
 	<a href="#subPages1" data-toggle="collapse" class="collapsed">
@@ -59,7 +57,3 @@
 		</ul>
 	</div>
 </li>
-{% endblock %}
-{% block main %}
-    main
-{% endblock %}
