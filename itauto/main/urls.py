@@ -1,4 +1,4 @@
-"""itauto URL Configuration
+"""main URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -14,18 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 
 urlpatterns = [
-    path('', include("apps.home.urls")),
-    path('apps/', include("apps.apps.urls")),
-    path('config/', include("apps.config.urls")),
-    path('controller/', include("apps.controller.urls")),
-    path('home/', include("apps.home.urls")),
-    path('hosts/', include("apps.hosts.urls")),
-    path('notify/', include("apps.notify.urls")),
-    path('schedule/', include("apps.schedule.urls")),
-    path('system/', include("apps.system.urls")),
-    path('monitor/', include("apps.monitor.urls")),
     path('admin/', admin.site.urls),
 ]
