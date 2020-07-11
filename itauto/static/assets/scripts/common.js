@@ -1,5 +1,11 @@
 $(document).ready(function() {
-
+	
+	
+	$("a").each(function(){
+			if ($(this).attr("id") != undefined ){
+				$(this).attr("href", "/api/" + $(this).attr("id"));
+			}
+	});
 	/*-----------------------------------/
 	/*	TOP NAVIGATION AND LAYOUT
 	/*----------------------------------*/
