@@ -1,11 +1,23 @@
 $(document).ready(function() {
-	
-	
+
+	/*-----------------------------------/
+	/*NAVIGATION  a href
+	/*----------------------------------*/
+
 	$("a").each(function(){
 			if ($(this).attr("id") != undefined ){
 				$(this).attr("href", "/api/" + $(this).attr("id"));
 			}
+			if ("/api/" + $(this).attr("id") == window.location.pathname){
+				$(this).addClass("active");
+				var parent = $(this).parent().parent().parent();
+				if (parent.hasClass("collapse")){
+					parent.addClass("in")
+				}
+			}
 	});
+
+
 	/*-----------------------------------/
 	/*	TOP NAVIGATION AND LAYOUT
 	/*----------------------------------*/
