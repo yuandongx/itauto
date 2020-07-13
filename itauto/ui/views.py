@@ -10,5 +10,10 @@ def cli(request):
 def template(request):
     return render(request, "index.html")
 
+
+def hosts(request):
+    return render(request, "hosts.html")
+
+
 def tasks(request):
     return render(request, "exec-tasks.html")

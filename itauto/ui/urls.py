@@ -16,6 +16,7 @@ from django.urls import path
 from . import views
 urlpatterns = [
     path("home", views.home),
+    path("hosts", views.hosts),
     path("cli", views.cli),
     path("tasks", views.tasks),
     path("template", views.template),
