@@ -12,11 +12,14 @@
 				 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal2">
 				  批量导入
 				</button>
+				
+				
 				<!-- 模态框1 -->
 				<div class="modal fade" id="Modal1">
+				
 				  <div class="modal-dialog">
 					<div class="modal-content">
-				 
+					<form action="/api/add-host" method="post">
 					  <!-- 模态框头部 -->
 					  <div class="modal-header">
 						<h4 class="modal-title">新增主机</h4>
@@ -25,39 +28,48 @@
 					  <!-- 模态框主体 -->
 					  <div class="modal-body">
 						
-						<table class="table table-bordered">
-						  
-						  <tbody>
-							<tr>
-							  <td>
-								<div class="input-group">
-									<span class="input-group-addon">@</span>
-									<input type="text" class="form-control" placeholder="twitterhandle">
+						
+						<!-- INPUT GROUPS -->
+							<div class="panel">
+								<div class="panel-body">
+									<div class="input-group">
+										<span class="input-group-addon">主机类别</span>
+										<select class="form-control">
+										<option value="cheese">unbuntu-web</option>
+										<option value="tomatoes">centos</option>
+										<option value="mozarella">unbuntu</option>
+										<option value="mushrooms">fw-asa</option>
+										<option value="pepperoni">fw-topsec</option>
+										<option value="onions">sw-huawei</option>
+									</select>
+									</div>
+									<br>
+									<div class="input-group">
+										<span class="input-group-addon">主机名</span>
+										<input class="form-control" type="text" value="hostname">
+									</div>
+									<br>
+									<div class="input-group">
+										<span class="input-group-addon">ssh</span>
+										<input class="form-control" type="text" value="username">
+										<span class="input-group-addon">@</span>
+										<input class="form-control" type="text" value="Host IP">
+										<span class="input-group-addon">-p</span>
+										<input class="form-control" type="text" value="port">
+									</div>
 								</div>
-								</td>
-							  <td><a href="#">添加类别</a></td>
-							  <td><a href="#">修改类别</a></td>
-							</tr>
-							<tr>
-							  <td>Sachin</td>
-							  <td>Mumbai</td>
-							  <td>400003</td>
-							</tr>
-							<tr>
-							  <td>Uma</td>
-							  <td>Pune</td>
-							  <td>411027</td>
-							</tr>
-						  </tbody>
-						</table>
+							</div>
+							<!-- END INPUT GROUPS -->
+						
 						
 					  </div>
-				 
 					  <!-- 模态框底部 -->
 					  <div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+						<button type="submit" class="btn btn-secondary" >提交</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
 					  </div>
 				 
+				  </form>
 					</div>
 				  </div>
 				</div>
