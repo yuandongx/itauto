@@ -19,7 +19,8 @@
 				
 				  <div class="modal-dialog">
 					<div class="modal-content">
-					<form action="/api/add-host" method="post">
+					<form action="/api/add-host" method="post" onsubmit="javascript:return postModalData();">
+					{% csrf_token %}
 					  <!-- 模态框头部 -->
 					  <div class="modal-header">
 						<h4 class="modal-title">新增主机</h4>
@@ -60,8 +61,7 @@
 								</div>
 							</div>
 							<!-- END INPUT GROUPS -->
-						
-						
+
 					  </div>
 					  <!-- 模态框底部 -->
 					  <div class="modal-footer">

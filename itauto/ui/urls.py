@@ -17,6 +17,7 @@ from . import views
 urlpatterns = [
     path("home", views.home),
     path("hosts", views.hosts),
+    path("add-host", views.add_host),
     path("cli", views.cli),
     path("tasks", views.tasks),
     path("template", views.template),
