@@ -19,9 +19,9 @@ from ui import views
 urlpatterns = [
     path('api/', include("api.urls")),
     path("hosts/", include("host.urls")),
+    path("tasks", include("task.urls")),
     path("home", views.home, name="home"),
     path("cli", views.cli, name="cli"),
-    path("tasks", views.tasks, name="tasks"),
     path("template", views.template, name="template"),
     path("", views.template, name="apps-deploy"),
     path("", views.template, name="schedule"),

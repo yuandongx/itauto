@@ -38,7 +38,7 @@
 					<tbody>
 					{% for host in page_obj %}
 					<tr>
-					  <th scope="row">1</th>
+					  <th scope="row">{{host.host_id}}</th>
 					  <td>{{host.host_type}}</td>
 					  <td>{{host.host_name}}</td>
 					  <td>{{host.host_ip}}</td>
