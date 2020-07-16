@@ -15,8 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from ui import views
 urlpatterns = [
-    path('api/', include("ui.urls")),
+    path('api/', include("api.urls")),
+    path("hosts/", include("host.urls")),
+    path("home", views.home, name="home"),
+    path("cli", views.cli, name="cli"),
+    path("tasks", views.tasks, name="tasks"),
+    path("template", views.template, name="template"),
+    path("", views.template, name="apps-deploy"),
+    path("", views.template, name="schedule"),
+    path("", views.template, name="environ"),
+    path("", views.template, name="service"),
+    path("", views.template, name="apps-config"),
+    path("", views.template, name="monitor"),
+    path("", views.template, name="log"),
+    path("", views.template, name="contacts"),
+    path("", views.template, name="contacts-grp"),
+    path("", views.template, name="accounts"),
+    path("", views.template, name="roles"),
+    path("", views.template, name="devices"),
     path('admin/', admin.site.urls),
 ]

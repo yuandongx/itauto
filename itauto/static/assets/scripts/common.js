@@ -5,10 +5,7 @@ $(document).ready(function() {
 	/*----------------------------------*/
 
 	$("a").each(function(){
-			if ($(this).attr("id") != undefined ){
-				$(this).attr("href", "/api/" + $(this).attr("id"));
-			}
-			if ("/api/" + $(this).attr("id") == window.location.pathname){
+			if ($(this).attr("href") == window.location.pathname){
 				$(this).addClass("active");
 				var parent = $(this).parent().parent().parent();
 				if (parent.hasClass("collapse")){
@@ -17,6 +14,9 @@ $(document).ready(function() {
 			}
 	});
 
+	$("div.alert").each(function(){
+		$(this).addClass("alert-success").fadeIn(1500).fadeOut(1500);
+	});
 	/*-----------------------------------/
 	/*	TOP NAVIGATION AND LAYOUT
 	/*----------------------------------*/

@@ -31,7 +31,9 @@ ALLOWED_HOSTS = ["192.168.56.102"]
 # Application definition
 
 INSTALLED_APPS = [
-    "ui.apps.UiConfig",
+    "ui",
+    "api",
+    "host",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,7 +57,7 @@ ROOT_URLCONF = 'main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ["templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

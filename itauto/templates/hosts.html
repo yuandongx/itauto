@@ -12,15 +12,67 @@
 				 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal2">
 				  批量导入
 				</button>
-				
+				{% if messages %}
+					<ul class="messages" >
+						<p class="demo-button">
+						{% for message in messages %}
+						{% if message.tags %}
+						<div class="alert" >{{ message }}</div>
+						{% endif %}
+						{% endfor %}
+						</p>
+					</ul>
+				{% endif %}
+
+				<!-- 主机列表 --->
+				<table class="table table-striped">
+					<thead>
+					<tr>
+					  <th scope="col">#</th>
+					  <th scope="col">主机类别</th>
+					  <th scope="col">主机名</th>
+					  <th scope="col">主机IP</th>
+					  <th scope="col">端口</th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for host in page_obj %}
+					<tr>
+					  <th scope="row">1</th>
+					  <td>{{host.host_type}}</td>
+					  <td>{{host.host_name}}</td>
+					  <td>{{host.host_ip}}</td>
+					  <td>{{host.host_port}}</td>
+					</tr>
+					{% endfor %}
+					</tbody>
+					</table>
+					<div class="pagination">
+						<span class="step-links">
+							{% if page_obj.has_previous %}
+								<a href="?page=1">&laquo; first</a>
+								<a href="?page={{ page_obj.previous_page_number }}">previous</a>
+							{% endif %}
+
+							<span class="current">
+								Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+							</span>
+
+							{% if page_obj.has_next %}
+								<a href="?page={{ page_obj.next_page_number }}">next</a>
+								<a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+							{% endif %}
+						</span>
+					</div>
+				<!-- 主机列表 end--->
 				
 				<!-- 模态框1 -->
 				<div class="modal fade" id="Modal1">
 				
 				  <div class="modal-dialog">
 					<div class="modal-content">
-					<form action="/api/add-host" method="post" onsubmit="javascript:return postModalData();">
-					{% csrf_token %}
+					<form action="/hosts/add-host" method="post">
+						{% csrf_token %}
 					  <!-- 模态框头部 -->
 					  <div class="modal-header">
 						<h4 class="modal-title">新增主机</h4>
@@ -35,33 +87,39 @@
 								<div class="panel-body">
 									<div class="input-group">
 										<span class="input-group-addon">主机类别</span>
-										<select class="form-control">
-										<option value="cheese">unbuntu-web</option>
-										<option value="tomatoes">centos</option>
-										<option value="mozarella">unbuntu</option>
-										<option value="mushrooms">fw-asa</option>
-										<option value="pepperoni">fw-topsec</option>
-										<option value="onions">sw-huawei</option>
+										<select class="form-control" name="host_type">
+										<option value="unbuntu-web">unbuntu-web</option>
+										<option value="centos">centos</option>
+										<option value="unbuntu">unbuntu</option>
+										<option value="fw-asa">fw-asa</option>
+										<option value="fw-topsec">fw-topsec</option>
+										<option value="sw-huawei">sw-huawei</option>
 									</select>
 									</div>
 									<br>
 									<div class="input-group">
 										<span class="input-group-addon">主机名</span>
-										<input class="form-control" type="text" value="hostname">
+										<input class="form-control" type="text" name="host_name">
 									</div>
 									<br>
 									<div class="input-group">
 										<span class="input-group-addon">ssh</span>
-										<input class="form-control" type="text" value="username">
-										<span class="input-group-addon">@</span>
-										<input class="form-control" type="text" value="Host IP">
-										<span class="input-group-addon">-p</span>
-										<input class="form-control" type="text" value="port">
+										<input class="form-control" type="text" name="host_ip">
+										<span class="input-group-addon">端口</span>
+										<input class="form-control" type="text" value="22" name="host_port">
+									</div>
+									<br>
+									<div class="input-group">
+										<span class="input-group-addon">用户名:</span>
+										<input class="form-control" type="text" name="user_name" >
+										<span class="input-group-addon">密码:</span>
+										<input class="form-control" type="text" name="passwd">
 									</div>
 								</div>
 							</div>
 							<!-- END INPUT GROUPS -->
-
+						
+						
 					  </div>
 					  <!-- 模态框底部 -->
 					  <div class="modal-footer">
@@ -106,9 +164,6 @@
 				  </div>
 				</div>
 				<!-- 模态框2end -->
-				<!-- 主机列表 --->
-				
-				<!-- 主机列表 end--->
 				
 				
 				
