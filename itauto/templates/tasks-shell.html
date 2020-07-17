@@ -1,0 +1,51 @@
+
+{% extends "base/base.html" %}
+{% block main %} 
+<!-- MAIN -->
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<!-- 按钮：用于打开模态框 -->
+				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+				  新建任务
+				</button>
+				<!-- 主机列表 --->
+				
+				<!-- 主机列表 end--->
+				 
+				<!-- 模态框 -->
+				<form action="" method="post">
+				{% csrf_token %}
+				<div class="modal fade" id="myModal">
+				  <div class="modal-dialog modal-lg">
+					<div class="modal-content">
+					  <!-- 模态框头部 -->
+					  <div class="modal-header">
+						<h4 class="modal-title">新建任务</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					  </div>
+				 
+					  <!-- 模态框主体 -->
+					  <div class="modal-body">
+						
+						<div id="step-top">steps</div>
+						<div id="step-1">step1</div>
+						<div id="step-2" style="display: none">step2</div>
+						<div id="step-3" style="display: none">step3</div>
+						
+					  </div>
+					  <!-- 模态框底部 -->
+					  <div class="modal-footer">
+						<button type="button" class="btn btn-secondary" >下一步</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+					  </div>
+					</div>
+				  </div>
+				</div>
+				</form>
+			</div>
+			<!-- END MAIN CONTENT -->
+		</div>
+		<!-- END MAIN -->
+
+{% endblock %}

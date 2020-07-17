@@ -16,5 +16,6 @@ from django.urls import path
 from . import views
 urlpatterns = [
     path("", views.show, name="tasks"),
+    path("cli", views.show, name="cli"),
     path("add-task", views.add_task),
 ]
