@@ -32,7 +32,7 @@
 						</div>
 					</div>
 					<br>
-					<button type="button" class="btn btn-default" data-toggle="modal" data-target="#select-hosts" ><i class="fa fa-plus-square"></i> 从列表中选择主机 </button>
+					<button type="button" class="btn btn-default" data-toggle="modal" data-target="#test12345" ><i class="fa fa-plus-square"></i> 从列表中选择主机 </button>
 					<br>
 					<!--命令行输入区-->
 					<textarea class="form-control" placeholder="textarea" rows="4"></textarea>
@@ -57,9 +57,42 @@
         </button>
       </div>
       <div class="modal-body">
-  
+	  
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col col-2">
+      1 of 3
+    </div>
+    <div class="col-md-auto">
+      Variable width content
+    </div>
+    <div class="col col-2">
+      3 of 3
+    </div>
+  </div>
+<div class="row">
+  <div class="col-sm-4">col-sm-8</div>
+  <div class="col-sm-4">col-sm-4</div>
+</div>
+<div class="row">
+  <div class="col-4">col-sm</div>
+  <div class="col-4">col-sm</div>
+  <div class="col-4">col-sm</div>
+</div>
+
+</div>
+
+<div class="container">
+  <div class="row row-cols-3">
+    <div class="col-2">Column</div>
+    <div class="col-2">Column</div>
+    <div class="col-2">Column</div>
+    <div class="col-2">Column</div>
+  </div>
+</div>
+		
 		  <div class="container">
-			<label for="host_type">选择主机类别:</label>
+			<label for="host_type">选择类别:</label>
 			<select name="host_type">
 			<option value="unbuntu-web">unbuntu-web</option>
 			<option value="centos">centos</option>
@@ -74,7 +107,7 @@
 			<label for="select-all">全选</label>
 		   <button type="button" class="btn btn-round btn-info">刷新</button>
 		</div>
-  
+		<hr />
   <table class="table table-striped">
   <thead class="thead-dark">
     <tr>
@@ -134,4 +167,49 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="test12345">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-4">.col-md-4</div>
+          <div class="col-md-4 col-md-offset-4">.col-md-4 .col-md-offset-4</div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 col-md-offset-3">.col-md-3 .col-md-offset-3</div>
+          <div class="col-md-2 col-md-offset-4">.col-md-2 .col-md-offset-4</div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">.col-md-6 .col-md-offset-3</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-9">
+            Level 1: .col-sm-9
+            <div class="row">
+              <div class="col-xs-8 col-sm-6">
+                Level 2: .col-xs-8 .col-sm-6
+              </div>
+              <div class="col-xs-4 col-sm-6">
+                Level 2: .col-xs-4 .col-sm-6
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 {% endblock %}
