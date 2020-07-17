@@ -17,7 +17,6 @@ from django.contrib import admin
 from django.urls import path, include
 from ui import views
 urlpatterns = [
-    path('api/', include("api.urls")),
     path("hosts/", include("host.urls")),
     path("tasks/", include("task.urls")),
     path("home", views.home, name="home"),

@@ -32,7 +32,6 @@ ALLOWED_HOSTS = ["192.168.56.101"]
 
 INSTALLED_APPS = [
     "ui",
-    "api",
     "task",
     "host",
     'django.contrib.admin',
