@@ -67,7 +67,7 @@
           </div>
           <div class="col-md-4"><label for="host_type">主机名称:<label><input type="text" name="host_name"/></div>
         <div class="col-md-2"><span class="check"><input type="checkbox" class="checked" name="select-all"></span><label for="select-all">全选</label></div>
-        <div class="col-md-2"> <button type="button" class="btn btn-round btn-info">刷新</button></div>
+        <div class="col-md-2"> <button type="button" id="refresh", class="btn btn-round btn-info" onclick="getCliHosts()">刷新</button></div>
         </div>
         <div class="row"><hr></div>
         <div class="row">
@@ -81,7 +81,7 @@
                   <th scope="col">IP地址</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="hosts-list-cli">
                 <tr>
                   <th scope="row"><input id='op1' name='op1' type='checkbox'/></th>
                   <td>Mark</td>

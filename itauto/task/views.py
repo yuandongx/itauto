@@ -3,7 +3,9 @@ from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from .models import Task
+from host.models import Hosts
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 # Create your views here.
 
 def add_task(request):
@@ -32,3 +34,6 @@ def show(request):
 
 def cli(request):
     return render(request, "tasks-shell.html")
+
+def cli_hosts(request):
+    return JsonResponse({"a": 1})

@@ -1,5 +1,21 @@
 
 
+function getCliHosts(){
+    var id = $(this).attr("id");
+    $.ajax({
+        url: "/tasks/cli/get-hosts",
+        type: "GET",
+        data: "page=9",
+        success: function(data){
+            $("#hosts-list-cli").append(
+                "<tr><th scope=‘row’><input id='op1' name='op1' type='checkbox'/></th><td>Mark</td><td>Otto</td><td>@mdo</td></tr>"
+            );
+        },
+    });
+    return false;
+}
+
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
