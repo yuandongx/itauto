@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ["192.168.56.101", "192.168.56.102"]
 
 # Application definition
 
+
 INSTALLED_APPS = [
     "ui",
     "task",
