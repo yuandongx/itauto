@@ -19,9 +19,18 @@
 					</div>
 					<br>
 					<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modalHostList" ><i class="fa fa-plus-square"></i> 从列表中选择主机 </button>
-					<br>
+
+					<hr>
 					<!--命令行输入区-->
-					<textarea class="form-control" placeholder="textarea" rows="4"></textarea>
+					<textarea id="cli-input" class="form-control" placeholder="textarea" rows="10" cols="50"></textarea>
+					<script>
+						$("#cli-input").setTextareaCount({
+							width: "30px",
+							bgColor: "#000",
+							color: "#FFF",
+							display: "inline-block"
+						});
+					</script>
 					<br>
 					
 				</div>
