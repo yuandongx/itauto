@@ -1,4 +1,21 @@
 
+function listen_cli_result(){
+    if (typeof (EventSource) !== "undefined") {
+        var source = new EventSource("/tasks/cli/results");
+        source.onmessage = function (event) {
+            document.getElementById("result").innerHTML += event.data + "<br>";
+        };
+    }
+    else {
+        document.getElementById("result").innerHTML = "抱歉，你的浏览器不支持 server-sent 事件...";
+    }
+}
+
+
+function start_exec_cli(){
+    $("#cli-result-modal-dialog").modal("show");
+}
+
 
 function confirm_select_cli_host(){
     var rows = document.getElementById("cli-hosts-lists").rows;

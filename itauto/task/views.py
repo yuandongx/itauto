@@ -53,3 +53,9 @@ def cli_hosts(request):
             host_name=host.host_name,
             host_ip=host.host_ip))
     return HttpResponse("".join(result))
+
+
+def cli_results(request):
+    response = HttpResponse(content_type='text/event-stream')
+    response.content="12314"
+    return response
