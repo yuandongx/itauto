@@ -34,7 +34,7 @@ function confirm_select_cli_host(){
 		node.appendChild(ig);
         hosts.appendChild(node);
     }
-	$("#modalHostList").modal('hide')
+	$("#modalHostList").modal('hide');
 }
 
 
@@ -99,6 +99,6 @@ function postModalData(){
                 }
             });
 	 
-		$('#Modal1').modal('hide')
+		$('#Modal1').modal('hide');
             return false;
 }
