@@ -4,12 +4,12 @@
 
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-from core.consumer import routing, executors
+from core.routing import websocket_urlpatterns
 
 application = ProtocolTypeRouter({
-    'channel': ChannelNameRouter({
-        'ssh_exec': executors.SSHExecutor,
-    }),
+    # 'channel': ChannelNameRouter({
+        # 'ssh_exec': executors.SSHExecutor,
+    # }),
     'websocket': URLRouter(
         routing.websocket_urlpatterns
     )

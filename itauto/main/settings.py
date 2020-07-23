@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ["192.168.56.101", "192.168.56.102", "127.0.0.1"]
 
 INSTALLED_APPS = [
     "ui",
+    "core.apps.CoreConfig",
     "task",
     "host",
     "channels",
@@ -72,8 +73,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'main.wsgi.application'
-ASGI_APPLICATION = 'main.routing.application'
 
+ASGI_APPLICATION = 'main.routing.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -133,4 +134,4 @@ CHANNEL_LAYERS = {
         'CONFIG': {
             'hosts': [('localhost', 6379)],
         }
-}
+}}
