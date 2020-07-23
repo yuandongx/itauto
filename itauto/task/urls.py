@@ -18,6 +18,6 @@ urlpatterns = [
     path("", views.show, name="tasks"),
     path("cli", views.cli, name="cli"),
     path("cli/get-hosts", views.cli_hosts, name="cli-hosts"),
-    path("cli/results", views.cli_results, name="cli-results"),
+    path("cli/exec", views.exec_cli_tasks, name="cli-exec"),
     path("add-task", views.add_task),
 ]
