@@ -1,19 +1,53 @@
 
-function listen_cli_result(){
-    if (typeof (EventSource) !== "undefined") {
-        var source = new EventSource("/tasks/cli/results");
-        source.onmessage = function (event) {
-            document.getElementById("result").innerHTML += event.data + "<br>";
-        };
-    }
-    else {
-        document.getElementById("result").innerHTML = "抱歉，你的浏览器不支持 server-sent 事件...";
-    }
+function webChannel(rome, token){
+	if ("WebSocket" in window)
+		{
+		   alert("您的浏览器支持 WebSocket!");
+
+		   // 打开一个 web socket
+		   var ws = new WebSocket("ws://" + window.location.host + rome + token + "/" );
+
+		   ws.onmessage = function (evt) 
+		   { 
+			  var received_msg = evt.data;
+			  alert("数据已接收..." + received_msg);
+		   };
+			
+		   ws.onclose = function()
+		   { 
+			  // 关闭 websocket
+			  alert("连接已关闭..."); 
+		   };
+		}
+		
+		else
+		{
+		   // 浏览器不支持 WebSocket
+		   alert("您的浏览器不支持 WebSocket!");
+		}
 }
 
 
 function start_exec_cli(){
+	var hosts = new Array();
+	$("#hosts-list").children().each(function(){
+		hosts.push($(this).attr("name"));
+	});
     $("#cli-result-modal-dialog").modal("show");
+	$.ajax({
+        url: "/tasks/cli/exec",
+		headers: {
+			"X-CSRFToken": getCookie("csrftoken") 
+		},
+        type: "POST",
+        data: hosts,
+        success: function (result) {
+            //refresh_cli_hosts(result);
+            // $("#hosts-list-cli").html(result);
+			webChannel("/ws/cli/", result.token);
+			console.log(result.token);
+        },
+    });
 }
 
 
@@ -24,6 +58,7 @@ function confirm_select_cli_host(){
         var node = document.createElement("span");
         node.setAttribute("class", "label label-primary");
 		node.setAttribute("id", "host-" + rows[i].cells[0].firstChild.id);
+		node.setAttribute("name", rows[i].cells[0].firstChild.id);
         node.textContent = rows[i].cells[2].textContent + "(" + rows[i].cells[1].textContent+")";
         var ig = document.createElement("i");
         ig.setAttribute("class", "glyphicon glyphicon-remove");

@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
 from .models import Task
 from host.models import Hosts
+from core.consumer.channel import Channel 
 # Create your views here.
 
 def add_task(request):
@@ -55,7 +56,21 @@ def cli_hosts(request):
     return HttpResponse("".join(result))
 
 
-def cli_results(request):
-    response = HttpResponse(content_type='text/event-stream')
-    response.content="12314"
-    return response
+def exec_cli_tasks(request):
+    token = Channel.get_token()
+    host_ids = request.GET.get("host_ids")
+    for host in Hosts.objects.filter(host_id=host_ids):
+            # Channel.send_ssh_executor(
+                # token=token,
+                # hostname=host.hostname,
+                # port=host.port,
+                # username=host.username,
+                # command=form.command
+            # )
+            Channel.send_channel_msg(token,
+                dict(
+                hostname=host.hostname,
+                port=host.port,
+                username=host.username,
+                command=form.command))
+    return JsonResponse(dict(token=token))

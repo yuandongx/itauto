@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ["192.168.56.101", "192.168.56.102", "127.0.0.1"]
 
 INSTALLED_APPS = [
     "ui",
-    "core.apps.CoreConfig",
+    "core",
     "task",
     "host",
     "channels",
@@ -132,6 +132,6 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('localhost', 6379)],
+            'hosts': [('127.0.0.1', 6379)],
         }
 }}
