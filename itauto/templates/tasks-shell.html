@@ -17,7 +17,7 @@
 						</div>
 					</div>
 					<br>
-					<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modalHostList" ><i class="fa fa-plus-square"></i> 从列表中选择</button>
+					<button name="btn" id="btn-select-hosts" onclick="getCliHosts(this)" data-toggle="modal" data-target="#modalHostList"><i class="fa fa-plus-square"></i> 从列表中选择</button>
 
 					<hr>
 					<!--命令行输入区-->
@@ -84,19 +84,19 @@
         <div class="row">
           <div class="col">
                         
-            <nav aria-label="Page navigation example">
+            <nav aria-label="Page navigation">
               <ul class="pagination">
                 <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Previous">
+                  <a class="page-link" aria-label="Previous" onclick="getCliHosts(this)" id="page-previous">
                     <span aria-hidden="true">&laquo;</span>
                     <span class="sr-only">Previous</span>
                   </a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Next">
+                <li class="page-item" id="page-1"><a onclick="getCliHosts(this)" class="page-link" id="page-item-1">1</a></li>
+                <li class="page-item" id="page-2"><a onclick="getCliHosts(this)" class="page-link" id="page-item-2">2</a></li>
+                <li class="page-item" id="page-3"><a onclick="getCliHosts(this)" class="page-link" id="page-item-3">3</a></li>
+                <li class="page-item" >
+                  <a class="page-link" id="page-next" onclick="getCliHosts(this)" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                     <span class="sr-only">Next</span>
                   </a>

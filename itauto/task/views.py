@@ -31,6 +31,7 @@ def add_task(request):
 def show(request):
     tasks_list = Task.objects.all()
     paginator = Paginator(tasks_list, 10) # Show 25 contacts per page.
+    page_range = paginator.page_range
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, "tasks.html", {'page_obj': page_obj})
@@ -40,20 +41,33 @@ def cli(request):
     return render(request, "tasks-shell.html")
 
 def cli_hosts(request):
+    data = {}
     result = []
     hosts = Hosts.objects.all()
-    for host in hosts:
+    paginator = Paginator(hosts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    if page_obj.has_next():
+        data["next_page_number"] = page_obj.next_page_number()
+    if page_obj.has_previous():
+        data["previous_page_number"] = page_obj.previous_page_number()
+    data['number'] = page_obj.number
+    data['num_pages'] = paginator.num_pages
+    # data["page_range"] = paginator.page_range
+    for host in page_obj:
         result.append(
             """<tr>
-                  <th scope="row"><input id='{host_id}' name='{host_id}' type='checkbox'/></th>
-                  <td>{host_type}</td>
-                  <td>{host_name}</td>
-                  <td>{host_ip}</td>
-                </tr>""".format(host_id=host.host_id,
+              <th scope="row"><input id='{host_id}' name='{host_id}' type='checkbox'/></th>
+              <td>{host_type}</td>
+              <td>{host_name}</td>
+              <td>{host_ip}</td>
+            </tr>""".format(host_id=host.host_id,
             host_type=host.host_type,
             host_name=host.host_name,
             host_ip=host.host_ip))
-    return HttpResponse("".join(result))
+    data["rows"]= "".join(result)
+    # return HttpResponse("".join(result))
+    return JsonResponse(data)
 
 
 def exec_cli_tasks(request):
