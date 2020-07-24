@@ -73,19 +73,98 @@ function confirm_select_cli_host(){
 }
 
 
-function getCliHosts(){
-    var id = $(this).attr("id");
+function getCliHosts(target){
+
+	var id = target.id
+	if (id == "btn-select-hosts") {
+		$("#page-1").addClass("active");
+	}
+	var active_page = $("#page-item-1").text();
+	if ($("#page-2").hasClass("active")){
+		active_page = $("#page-item-2").text();
+	} else if ($("#page-3").hasClass("active")){
+		active_page = $("#page-item-3").text();
+	}
+	var num_active = Number(active_page);
+	console.log("active: " + active_page);
+	var page = {"page": "1"};
+	if (id == "page-item-1" || id == "page-item-2" || id == "page-item-3") {
+		page.page = $(target).text();
+		console.log("1");
+	} else if (id == "page-previous"){
+		if (num_active > 1){
+			page.page = (num_active - 1).toString();
+		} else {
+			return false;
+		}
+		console.log("2");
+	} else if (id == "page-next"){
+		//if ($("#page-next").prop("disable") == false){
+		//	page.page = (num_active + 1).toString();
+		//}
+		page.page = (num_active + 1).toString();
+		console.log("3");
+	} else{
+		console.log("4");
+	}
+	$("#page-1").removeClass("active");
+	$("#page-2").removeClass("active");
+	$("#page-3").removeClass("active");
+	console.log(page);
+	console.log("5");
     $.ajax({
         url: "/tasks/cli/get-hosts",
         type: "GET",
-        data: "page=9",
+		data: page,
         success: function (result) {
-            //refresh_cli_hosts(result);
-            $("#hosts-list-cli").html(result);
+			var num_pages = Number(result.num_pages);
+			var current_number = Number(result.number);
+			if (num_pages > 0) {
+				$("#page-1").show();
+			}
+			if (num_pages > 1) {
+				$("#page-2").show();
+			}
+			if (num_pages > 2) {
+				$("#page-3").show();
+			}
+			if (current_number == 1){
+				$("#page-item-1").text("1");
+				$("#page-1").addClass("active");
+			} else {
+				if (num_pages == 2){
+					$("#page-item-1").text("1");
+					$("#page-item-2").text("2");
+					if (current_number == 1) {
+							$("#page-1").addClass("active");
+							$("#page-previous").prop("disable", true);
+						} else {
+							$("#page-2").addClass("active");
+							$("#page-previous").prop("disable", false);
+						}
+				} else if (num_pages > 2){
+					if (current_number == num_pages){
+						$("#page-item-3").text(current_number);
+						$("#page-3").addClass("active");
+						$("#page-item-2").text(current_number - 1);
+						$("#page-item-1").text(current_number - 2);
+						$("#page-next").prop("disable", true);
+					} else {
+						$("#page-item-3").text(current_number + 1);
+						$("#page-2").addClass("active");
+						$("#page-item-2").text(current_number);
+						$("#page-item-1").text(current_number - 1);
+						$("#page-next").prop("disable", false);
+					}
+				}
+			}
+            $("#hosts-list-cli").html(result.rows);
+
         },
     });
     return false;
 }
+
 
 function select_table_all_rows(){
 
