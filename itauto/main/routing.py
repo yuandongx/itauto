@@ -4,7 +4,7 @@
 
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter, ChannelNameRouter
-from core.consumer.routing import websocket_urlpatterns
+from core.communicate.routing import websocket_urlpatterns
 # from core.consumer.consumers import websocket_urlpatterns
 
 application = ProtocolTypeRouter({

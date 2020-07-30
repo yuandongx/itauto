@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from ui import views
+from home import views
 urlpatterns = [
     path("hosts/", include("host.urls")),
     path("tasks/", include("task.urls")),
-    path("home", views.home, name="home"),
+    path("home/", include("home.urls")),
     path("template", views.template, name="template"),
     path("", views.template, name="apps-deploy"),
     path("", views.template, name="schedule"),

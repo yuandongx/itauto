@@ -15,7 +15,9 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
+#celery settings
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
+CELERY_BROKER_URL = 'redis://localhost:6379/1'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -31,7 +33,7 @@ ALLOWED_HOSTS = ["192.168.56.101", "192.168.56.102", "127.0.0.1"]
 
 
 INSTALLED_APPS = [
-    "ui",
+
     "core",
     "task",
     "host",

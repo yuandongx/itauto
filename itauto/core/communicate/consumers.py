@@ -1,11 +1,13 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
+from task.tasks import send_test, ansible_run
 import json
+from core.ansible.runtask import RunTasks
 
 class WbChannels(AsyncWebsocketConsumer):
     async def connect(self):
         self.token = self.scope["url_route"]["kwargs"]["token"]
         self.chat_group_name = self.token
-        # 收到连接时候处理，
+        # connect time out
         await self.channel_layer.group_add(
             self.chat_group_name,
             self.channel_name
@@ -14,13 +16,13 @@ class WbChannels(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        # 关闭channel时候处理
+        # close connection and to do something.
         await self.channel_layer.group_discard(
             self.chat_group_name,
             self.channel_name
         )
 
-    # 收到消息
+    # receive message
     async def receive(self, text_data=None, bytes_data=None):
         data = text_data or bytes_data
         print('write: {!r}'.format(data))
@@ -29,22 +31,28 @@ class WbChannels(AsyncWebsocketConsumer):
                 data = json.loads(data)
             message = data['message']
             type = data["type"]
-            print("收到消息--》",message)
-            # 发送消息到组
+            print("received - >",message)
+            # send received message to group
             await self.channel_layer.group_send(
                 self.chat_group_name,
-                {
-                    'type': 'client.message',
-                    'message': message
-                }
+                data
             )
 
-    # 处理客户端发来的消息
-    async def send_to_wb(self, event):
+
+    # deal with message and send to client(this is websocket)
+    async def send_to_web(self, event):
+        print(event)
         message = event['message']
-        print("发送消息。。。",message)
-        # 发送消息到 WebSocket
+        print("send message -->",message)
+        #send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message
         }))
+
+    # deal with message and send to client(this is websocket)
+    def ansible_cli(self, event):
+        if event.get("token"):
+            # ansible_run.delay(event)
+            runner = RunTasks(token="bda3bb50-2abf-4ba0-a793-a1d43f927c11")
+            runner(1, 2, 3)
 

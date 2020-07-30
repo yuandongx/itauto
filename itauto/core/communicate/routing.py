@@ -6,6 +6,5 @@ from .consumers import WbChannels
 from django.conf.urls import url
 websocket_urlpatterns = [
     # path('ws/task/<str:token>/', ExecConsumer),
-    url('ws/cli/<str:token>/', WbChannels),
-    url('ws/cli/(?P<token>\w+)/$', WbChannels),
+    url('ws/cli/(?P<token>\S+)/$', WbChannels),
 ]

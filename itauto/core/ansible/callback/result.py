@@ -1,0 +1,388 @@
+#!/usr/bin/env python
+import time
+from ansible import constants as C
+from ansible.plugins.callback import CallbackBase
+from ansible.playbook.task_include import TaskInclude
+try:
+    from core.communicate.channel import Channel
+    HAS_CHANNEL = True
+except ImportError:
+    HAS_CHANNEL = False
+
+
+class ResultCallback(CallbackBase):
+    """A sample callback plugin used for performing an action as results come in
+
+    If you want to collect all results into a single object for processing at
+    the end of the execution, look into utilizing the ``json`` callback plugin
+    or writing your own custom callback plugin
+    """
+    CALLBACK_VERSION = 2.0
+    CALLBACK_TYPE = "stdout"
+    CALLBACK_NAME = "result"
+
+    def __init__(self, token=None):
+        self.token = token
+        self._play = None
+        self._last_task_banner = None
+        self._last_task_name = None
+        self._last_task_name = None
+        self._task_type_cache = {}
+        self.display_ok_hosts = True
+        self.display_ok_hosts = True
+        super(ResultCallback, self).__init__()
+        
+    def set_token(self, token):
+        setattr(self, "token", token)
+
+    def send_msg(self, msg, *agrs, **kwargs):
+        print(msg)
+        if HAS_CHANNEL:
+            Channel.send_msg(self.token, msg)
+
+    def v2_runner_on_failed(self, result, ignore_errors=False):
+
+        delegated_vars = result._result.get('_ansible_delegated_vars', None)
+        self._clean_results(result._result, result._task.action)
+
+        if self._last_task_banner != result._task._uuid:
+            self._print_task_banner(result._task)
+
+        self._handle_exception(result._result, use_stderr=self.display_failed_stderr)
+        self._handle_warnings(result._result)
+
+        if result._task.loop and 'results' in result._result:
+            self._process_items(result)
+
+        else:
+            if delegated_vars:
+                self.send_msg("fatal: [%s -> %s]: FAILED! => %s" % (result._host.get_name(), delegated_vars['ansible_host'],
+                                                                            self._dump_results(result._result)),
+                                      color=C.COLOR_ERROR, stderr=self.display_failed_stderr)
+            else:
+                self.send_msg("fatal: [%s]: FAILED! => %s" % (result._host.get_name(), self._dump_results(result._result)),
+                                      color=C.COLOR_ERROR, stderr=self.display_failed_stderr)
+
+        if ignore_errors:
+            self.send_msg("...ignoring", color=C.COLOR_SKIP)
+
+    def v2_runner_on_ok(self, result):
+
+        delegated_vars = result._result.get('_ansible_delegated_vars', None)
+
+        if isinstance(result._task, TaskInclude):
+            return
+        elif result._result.get('changed', False):
+            if self._last_task_banner != result._task._uuid:
+                self._print_task_banner(result._task)
+
+            if delegated_vars:
+                msg = "changed: [%s -> %s]" % (result._host.get_name(), delegated_vars['ansible_host'])
+            else:
+                msg = "changed: [%s]" % result._host.get_name()
+            color = C.COLOR_CHANGED
+        else:
+            if not self.display_ok_hosts:
+                return
+
+            if self._last_task_banner != result._task._uuid:
+                self._print_task_banner(result._task)
+
+            if delegated_vars:
+                msg = "ok: [%s -> %s]" % (result._host.get_name(), delegated_vars['ansible_host'])
+            else:
+                msg = "ok: [%s]" % result._host.get_name()
+            color = C.COLOR_OK
+
+        self._handle_warnings(result._result)
+
+        if result._task.loop and 'results' in result._result:
+            self._process_items(result)
+        else:
+            self._clean_results(result._result, result._task.action)
+
+            if self._run_is_verbose(result):
+                msg += " => %s" % (self._dump_results(result._result),)
+            self.send_msg(msg, color=color)
+
+    def v2_runner_on_skipped(self, result):
+
+        if self.display_skipped_hosts:
+
+            self._clean_results(result._result, result._task.action)
+
+            if self._last_task_banner != result._task._uuid:
+                self._print_task_banner(result._task)
+
+            if result._task.loop and 'results' in result._result:
+                self._process_items(result)
+            else:
+                msg = "skipping: [%s]" % result._host.get_name()
+                if self._run_is_verbose(result):
+                    msg += " => %s" % self._dump_results(result._result)
+                self.send_msg(msg, color=C.COLOR_SKIP)
+
+    def v2_runner_on_unreachable(self, result):
+        if self._last_task_banner != result._task._uuid:
+            self._print_task_banner(result._task)
+
+        delegated_vars = result._result.get('_ansible_delegated_vars', None)
+        if delegated_vars:
+            msg = "fatal: [%s -> %s]: UNREACHABLE! => %s" % (result._host.get_name(), delegated_vars['ansible_host'], self._dump_results(result._result))
+        else:
+            msg = "fatal: [%s]: UNREACHABLE! => %s" % (result._host.get_name(), self._dump_results(result._result))
+        self.send_msg(msg, color=C.COLOR_UNREACHABLE, stderr=self.display_failed_stderr)
+
+    # def v2_playbook_on_no_hosts_matched(self):
+        # self.send_msg("skipping: no hosts matched", color=C.COLOR_SKIP)
+
+    # def v2_playbook_on_no_hosts_remaining(self):
+        # self._display.banner("NO MORE HOSTS LEFT")
+
+    # def v2_playbook_on_task_start(self, task, is_conditional):
+        # self._task_start(task, prefix='TASK')
+
+    # def _task_start(self, task, prefix=None):
+        # Cache output prefix for task if provided
+        # This is needed to properly display 'RUNNING HANDLER' and similar
+        # when hiding skipped/ok task results
+        # if prefix is not None:
+            # self._task_type_cache[task._uuid] = prefix
+
+        # Preserve task name, as all vars may not be available for templating
+        # when we need it later
+        # if self._play.strategy == 'free':
+            # Explicitly set to None for strategy 'free' to account for any cached
+            # task title from a previous non-free play
+            # self._last_task_name = None
+        # else:
+            # self._last_task_name = task.get_name().strip()
+
+            # Display the task banner immediately if we're not doing any filtering based on task result
+            # if self.display_skipped_hosts and self.display_ok_hosts:
+                # self._print_task_banner(task)
+
+    def _print_task_banner(self, task):
+        # args can be specified as no_log in several places: in the task or in
+        # the argument spec.  We can check whether the task is no_log but the
+        # argument spec can't be because that is only run on the target
+        # machine and we haven't run it thereyet at this time.
+        
+        # So we give people a config option to affect display of the args so
+        # that they can secure this if they feel that their stdout is insecure
+        # (shoulder surfing, logging stdout straight to a file, etc).
+        args = ''
+        if not task.no_log and C.DISPLAY_ARGS_TO_STDOUT:
+            args = u', '.join(u'%s=%s' % a for a in task.args.items())
+            args = u' %s' % args
+
+        prefix = self._task_type_cache.get(task._uuid, 'TASK')
+
+        # Use cached task name
+        task_name = self._last_task_name
+        if task_name is None:
+            task_name = task.get_name().strip()
+
+        if task.check_mode and self.check_mode_markers:
+            checkmsg = " [CHECK MODE]"
+        else:
+            checkmsg = ""
+        self._display.banner(u"%s [%s%s]%s" % (prefix, task_name, args, checkmsg))
+        if self._display.verbosity >= 2:
+            path = task.get_path()
+            if path:
+                self.send_msg(u"task path: %s" % path, color=C.COLOR_DEBUG)
+
+        self._last_task_banner = task._uuid
+
+    # def v2_playbook_on_cleanup_task_start(self, task):
+        # self._task_start(task, prefix='CLEANUP TASK')
+
+    # def v2_playbook_on_handler_task_start(self, task):
+        # self._task_start(task, prefix='RUNNING HANDLER')
+
+    # def v2_runner_on_start(self, host, task):
+        # self.send_msg(" [started %s on %s]" % (task, host), color=C.COLOR_OK)
+
+    # def v2_playbook_on_play_start(self, play):
+        # name = play.get_name().strip()
+        # if play.check_mode and self.check_mode_markers:
+            # checkmsg = " [CHECK MODE]"
+        # else:
+            # checkmsg = ""
+        # if not name:
+            # msg = u"PLAY%s" % checkmsg
+        # else:
+            # msg = u"PLAY [%s]%s" % (name, checkmsg)
+
+        # self._play = play
+
+        # self._display.banner(msg)
+
+    # def v2_on_file_diff(self, result):
+        # if result._task.loop and 'results' in result._result:
+            # for res in result._result['results']:
+                # if 'diff' in res and res['diff'] and res.get('changed', False):
+                    # diff = self._get_diff(res['diff'])
+                    # if diff:
+                        # if self._last_task_banner != result._task._uuid:
+                            # self._print_task_banner(result._task)
+                        # self.send_msg(diff)
+        # elif 'diff' in result._result and result._result['diff'] and result._result.get('changed', False):
+            # diff = self._get_diff(result._result['diff'])
+            # if diff:
+                # if self._last_task_banner != result._task._uuid:
+                    # self._print_task_banner(result._task)
+                # self.send_msg(diff)
+
+    # def v2_runner_item_on_ok(self, result):
+
+        # delegated_vars = result._result.get('_ansible_delegated_vars', None)
+        # if isinstance(result._task, TaskInclude):
+            # return
+        # elif result._result.get('changed', False):
+            # if self._last_task_banner != result._task._uuid:
+                # self._print_task_banner(result._task)
+
+            # msg = 'changed'
+            # color = C.COLOR_CHANGED
+        # else:
+            # if not self.display_ok_hosts:
+                # return
+
+            # if self._last_task_banner != result._task._uuid:
+                # self._print_task_banner(result._task)
+
+            # msg = 'ok'
+            # color = C.COLOR_OK
+
+        # if delegated_vars:
+            # msg += ": [%s -> %s]" % (result._host.get_name(), delegated_vars['ansible_host'])
+        # else:
+            # msg += ": [%s]" % result._host.get_name()
+
+        # msg += " => (item=%s)" % (self._get_item_label(result._result),)
+
+        # self._clean_results(result._result, result._task.action)
+        # if self._run_is_verbose(result):
+            # msg += " => %s" % self._dump_results(result._result)
+        # self.send_msg(msg, color=color)
+
+    # def v2_runner_item_on_failed(self, result):
+        # if self._last_task_banner != result._task._uuid:
+            # self._print_task_banner(result._task)
+
+        # delegated_vars = result._result.get('_ansible_delegated_vars', None)
+        # self._clean_results(result._result, result._task.action)
+        # self._handle_exception(result._result)
+
+        # msg = "failed: "
+        # if delegated_vars:
+            # msg += "[%s -> %s]" % (result._host.get_name(), delegated_vars['ansible_host'])
+        # else:
+            # msg += "[%s]" % (result._host.get_name())
+
+        # self._handle_warnings(result._result)
+        # self.send_msg(msg + " (item=%s) => %s" % (self._get_item_label(result._result), self._dump_results(result._result)), color=C.COLOR_ERROR)
+
+    # def v2_runner_item_on_skipped(self, result):
+        # if self.display_skipped_hosts:
+            # if self._last_task_banner != result._task._uuid:
+                # self._print_task_banner(result._task)
+
+            # self._clean_results(result._result, result._task.action)
+            # msg = "skipping: [%s] => (item=%s) " % (result._host.get_name(), self._get_item_label(result._result))
+            # if self._run_is_verbose(result):
+                # msg += " => %s" % self._dump_results(result._result)
+            # self.send_msg(msg, color=C.COLOR_SKIP)
+
+    # def v2_playbook_on_include(self, included_file):
+        # msg = 'included: %s for %s' % (included_file._filename, ", ".join([h.name for h in included_file._hosts]))
+        # if 'item' in included_file._args:
+            # msg += " => (item=%s)" % (self._get_item_label(included_file._args),)
+        # self.send_msg(msg, color=C.COLOR_SKIP)
+
+    # def v2_playbook_on_stats(self, stats):
+        # self._display.banner("PLAY RECAP")
+
+        # hosts = sorted(stats.processed.keys())
+        # for h in hosts:
+            # t = stats.summarize(h)
+
+            # self.send_msg(
+                # u"%s : %s %s %s %s %s %s %s" % (
+                    # hostcolor(h, t),
+                    # colorize(u'ok', t['ok'], C.COLOR_OK),
+                    # colorize(u'changed', t['changed'], C.COLOR_CHANGED),
+                    # colorize(u'unreachable', t['unreachable'], C.COLOR_UNREACHABLE),
+                    # colorize(u'failed', t['failures'], C.COLOR_ERROR),
+                    # colorize(u'skipped', t['skipped'], C.COLOR_SKIP),
+                    # colorize(u'rescued', t['rescued'], C.COLOR_OK),
+                    # colorize(u'ignored', t['ignored'], C.COLOR_WARN),
+                # ),
+                # screen_only=True
+            # )
+
+            # self.send_msg(
+                # u"%s : %s %s %s %s %s %s %s" % (
+                    # hostcolor(h, t, False),
+                    # colorize(u'ok', t['ok'], None),
+                    # colorize(u'changed', t['changed'], None),
+                    # colorize(u'unreachable', t['unreachable'], None),
+                    # colorize(u'failed', t['failures'], None),
+                    # colorize(u'skipped', t['skipped'], None),
+                    # colorize(u'rescued', t['rescued'], None),
+                    # colorize(u'ignored', t['ignored'], None),
+                # ),
+                # log_only=True
+            # )
+
+        # self.send_msg("", screen_only=True)
+
+
+        # if stats.custom and self.show_custom_stats:
+            # self._display.banner("CUSTOM STATS: ")
+
+            # for k in sorted(stats.custom.keys()):
+                # if k == '_run':
+                    # continue
+                # self.send_msg('\t%s: %s' % (k, self._dump_results(stats.custom[k], indent=1).replace('\n', '')))
+
+
+            # if '_run' in stats.custom:
+                # self.send_msg("", screen_only=True)
+                # self.send_msg('\tRUN: %s' % self._dump_results(stats.custom['_run'], indent=1).replace('\n', ''))
+            # self.send_msg("", screen_only=True)
+
+        # if context.CLIARGS['check'] and self.check_mode_markers:
+            # self._display.banner("DRY RUN")
+
+    # def v2_playbook_on_start(self, playbook):
+        # if self._display.verbosity > 1:
+            # from os.path import basename
+            # self._display.banner("PLAYBOOK: %s" % basename(playbook._file_name))
+
+        # #show CLI arguments
+        # if self._display.verbosity > 3:
+            # if context.CLIARGS.get('args'):
+                # self.send_msg('Positional arguments: %s' % ' '.join(context.CLIARGS['args']),
+                                      # color=C.COLOR_VERBOSE, screen_only=True)
+
+            # for argument in (a for a in context.CLIARGS if a != 'args'):
+                # val = context.CLIARGS[argument]
+                # if val:
+                    # self.send_msg('%s: %s' % (argument, val), color=C.COLOR_VERBOSE, screen_only=True)
+
+        # if context.CLIARGS['check'] and self.check_mode_markers:
+            # self._display.banner("DRY RUN")
+
+    # def v2_runner_retry(self, result):
+        # task_name = result.task_name or result._task
+        # msg = "FAILED - RETRYING: %s (%d retries left)." % (task_name, result._result['retries'] - result._result['attempts'])
+        # if self._run_is_verbose(result, verbosity=2):
+            # msg += "Result was: %s" % self._dump_results(result._result)
+        # self.send_msg(msg, color=C.COLOR_DEBUG)
+
+    # def v2_playbook_on_notify(self, handler, host):
+        # if self._display.verbosity > 1:
+            # self.send_msg("NOTIFIED HANDLER %s for %s" % (handler.get_name(), host), color=C.COLOR_VERBOSE, screen_only=True)

@@ -7,9 +7,8 @@ from .models import Task
 from host.models import Hosts
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
-from .models import Task
+from task.models import Task
 from host.models import Hosts
-from core.consumer.channel import Channel 
 # Create your views here.
 
 def add_task(request):
@@ -71,20 +70,15 @@ def cli_hosts(request):
 
 
 def exec_cli_tasks(request):
-    token = Channel.get_token()
+
     host_ids = request.GET.get("host_ids")
-    for host in Hosts.objects.filter(host_id=host_ids):
-            # Channel.send_ssh_executor(
-                # token=token,
-                # hostname=host.hostname,
-                # port=host.port,
-                # username=host.username,
-                # command=form.command
-            # )
-            Channel.send_channel_msg(token,
-                dict(
-                hostname=host.hostname,
-                port=host.port,
-                username=host.username,
-                command=form.command))
-    return JsonResponse(dict(token=token))
+
+    t =  Task(task_name = "task_name",
+              task_type = "task_type",
+              latest_status = "latest_status",
+              create_time ="create_time",
+              description = "description",
+              update_time = "update_time",)
+    t.save()
+    print(t.task_uuid)
+    return JsonResponse(dict(token=t.task_uuid))

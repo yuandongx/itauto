@@ -6,7 +6,10 @@ function webChannel(rome, token){
 
 		   // 打开一个 web socket
 		   var ws = new WebSocket("ws://" + window.location.host + rome + token + "/" );
-
+		   ws.onopen = function (evt){
+			   var data = {"type": "ansible.cli", "token": token, "message": "websocket connected."}
+			   ws.send(JSON.stringify(data));
+		   };
 		   ws.onmessage = function (evt) 
 		   { 
 			  var received_msg = evt.data;
