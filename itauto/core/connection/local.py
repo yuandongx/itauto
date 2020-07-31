@@ -4,7 +4,11 @@ import struct
 import uuid
 import os
 from threading import Thread
-from utils import to_bytes, to_text
+from .utils import to_bytes, to_text
+from core.log import log
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+layer = get_channel_layer()
 
 
 def send_data(s, data):
@@ -32,25 +36,26 @@ def recv_data(s):
 
 
 def client_send(sock_path, data):
+
+    if data is None:
+        return
     with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sf:
         sf.connect(sock_path)
         send_data(sf, to_bytes(data))
 
 
-def runserver(hannder=None):
-    lserver = LocalServer()
-    lserver.hannder = hannder
+def runserver(channel_name):
+    lserver = LocalServer(channel_name)
     th = Thread(target=lserver.run, args=())
     th.start()
-    print(lserver.socket_path)
-    # lserver.run()
     return lserver
 
 
 class LocalServer(object):
-    def __init__(self):
+    def __init__(self, channel_name):
         self.signal_stop = False
         self.socket_path = "/tmp/it-auto.%s.tmp" % uuid.uuid4()
+        self.channel_name = channel_name
     def run(self):
         try:
             s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -61,7 +66,6 @@ class LocalServer(object):
                 (conn, addr) = s.accept()
                 with conn:
                     data = recv_data(conn)
-                    print(data)
                     self.hannder(data)
         except Exception as e:
             print(e)
@@ -72,16 +76,14 @@ class LocalServer(object):
         self.signal_stop = True
         os.remove(self.socket_path)
     def hannder(self, data):
-        print(data)
+        message = {
+                'type': 'ansible.web',
+                'message': to_text(data),
+            }
+        log.debug("hannder[local]"+ str(message))
+        log.debug("channel_name[local]" + self.channel_name)
+        async_to_sync(layer.group_send)(self.channel_name, message)
     def connect_timeout(self, signum, frame):
         msg = "onnection idle timeout triggered, timeout value is 5s"
         raise Exception(msg)
 
-def test_hanner(data):
-    with open("/home/ubuntu/www/itauto/core/connection/test.txt", "wb") as f:
-        f.write(data)
-
-
-if __name__ == "__main__":
-    l = runserver(test_hanner)
-    print(l.socket_path)

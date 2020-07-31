@@ -3,11 +3,11 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from .models import Task
-from host.models import Hosts
+
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
 from task.models import Task
+# from task.tasks import ansible_run
 from host.models import Hosts
 # Create your views here.
 
@@ -72,7 +72,6 @@ def cli_hosts(request):
 def exec_cli_tasks(request):
 
     host_ids = request.GET.get("host_ids")
-
     t =  Task(task_name = "task_name",
               task_type = "task_type",
               latest_status = "latest_status",
@@ -80,5 +79,4 @@ def exec_cli_tasks(request):
               description = "description",
               update_time = "update_time",)
     t.save()
-    print(t.task_uuid)
     return JsonResponse(dict(token=t.task_uuid))

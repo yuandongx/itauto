@@ -35,7 +35,7 @@ class RunTasks():
 
         # Instantiate our ResultCallback for handling results as they come in. Ansible expects this to be one of its main display outlets
         self._token = kwargs.get("token")
-        self._callback = ResultCallback(token=self._token)
+        self._callback = ResultCallback(token=self._token, socket_path=kwargs.get("socket_path"))
 
         # create inventory, use path to host config file as source or hosts in a comma separated string
         self._inventory = InventoryManager(loader=self._loader, sources='localhost,')

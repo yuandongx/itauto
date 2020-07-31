@@ -1,1 +1,1 @@
-/tmp/it-auto.40fa460f-e7bb-4cc5-a7d7-b35e00e107b0.tmp
+{'type': 'ansible.web', 'message': 'changed: [localhost]'}{'type': 'ansible.web', 'message': 'ok: [localhost] => {\n    "msg": "core\\ndb.sqlite3\\nhome\\nhost\\nmain\\nmanage.py\\nstart-server.sh\\nstatic\\ntask\\ntemplates\\ntest.py"\n}'}{'type': 'ansible.web', 'message': 'changed: [localhost]'}{'type': 'ansible.web', 'message': 'ok: [localhost] => {\n    "msg": "core\\ndb.sqlite3\\nhome\\nhost\\nmain\\nmanage.py\\nstart-server.sh\\nstatic\\ntask\\ntemplates\\ntest.py"\n}'}

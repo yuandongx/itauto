@@ -3,11 +3,8 @@ import time
 from ansible import constants as C
 from ansible.plugins.callback import CallbackBase
 from ansible.playbook.task_include import TaskInclude
-try:
-    from core.communicate.channel import Channel
-    HAS_CHANNEL = True
-except ImportError:
-    HAS_CHANNEL = False
+from core.log import log
+from core.connection import client_send
 
 
 class ResultCallback(CallbackBase):
@@ -21,9 +18,11 @@ class ResultCallback(CallbackBase):
     CALLBACK_TYPE = "stdout"
     CALLBACK_NAME = "result"
 
-    def __init__(self, token=None):
+    def __init__(self, token=None, socket_path=None):
         self.token = token
         self._play = None
+        self.socket_path = socket_path
+        log.debug("socket path =" + socket_path)
         self._last_task_banner = None
         self._last_task_name = None
         self._last_task_name = None
@@ -35,10 +34,10 @@ class ResultCallback(CallbackBase):
     def set_token(self, token):
         setattr(self, "token", token)
 
-    def send_msg(self, msg, *agrs, **kwargs):
-        print(msg)
-        if HAS_CHANNEL:
-            Channel.send_msg(self.token, msg)
+    def send_msg(self, msg, *args, **kwargs):
+        # log.debug(msg)
+        if msg is not None:
+            client_send(self.socket_path, msg)
 
     def v2_runner_on_failed(self, result, ignore_errors=False):
 
@@ -188,10 +187,10 @@ class ResultCallback(CallbackBase):
         else:
             checkmsg = ""
         self._display.banner(u"%s [%s%s]%s" % (prefix, task_name, args, checkmsg))
-        if self._display.verbosity >= 2:
-            path = task.get_path()
-            if path:
-                self.send_msg(u"task path: %s" % path, color=C.COLOR_DEBUG)
+
+        path = task.get_path()
+        if path:
+            self.send_msg(u"task path: %s" % path, color=C.COLOR_DEBUG)
 
         self._last_task_banner = task._uuid
 
