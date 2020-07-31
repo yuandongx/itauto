@@ -3,7 +3,6 @@ from __future__ import absolute_import, unicode_literals
 
 from celery import shared_task
 from core.ansible.runtask import RunTasks
-# from demoapp.models import Widget
 from core.log import log
 from core.connection import runserver
 
