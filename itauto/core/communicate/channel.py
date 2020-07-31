@@ -13,10 +13,18 @@ class Channel:
     def get_token():
         return uuid.uuid4().hex
 
+    # @staticmethod
+    # def send_msg(token, msg):
+        # message = {
+                # 'type': 'send_to_web',
+                # 'message': msg,
+            # }
+        # async_to_sync(layer.group_send)(token, message)
+
     @staticmethod
     def send_msg(token, msg):
         message = {
                 'type': 'send_to_web',
                 'message': msg,
             }
-        async_to_sync(layer.group_send)(token, message)
+        layer.group_send(token, message)

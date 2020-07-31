@@ -2,7 +2,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from task.tasks import send_test, ansible_run
 import json
 from core.ansible.runtask import RunTasks
-
+from threading import Thread
 class WbChannels(AsyncWebsocketConsumer):
     async def connect(self):
         self.token = self.scope["url_route"]["kwargs"]["token"]
@@ -50,9 +50,10 @@ class WbChannels(AsyncWebsocketConsumer):
         }))
 
     # deal with message and send to client(this is websocket)
-    def ansible_cli(self, event):
+    async def ansible_cli(self, event):
         if event.get("token"):
             # ansible_run.delay(event)
             runner = RunTasks(token="bda3bb50-2abf-4ba0-a793-a1d43f927c11")
-            runner(1, 2, 3)
+            th = Thread(target=runner, args=(1, 2, 3))
+            th.start()
 
