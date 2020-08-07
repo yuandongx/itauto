@@ -1,0 +1,5 @@
+#!/bin/bash
+redis-server /etc/redis/redis.conf
+
+docker run -it -v itauto:/www 8000:800 ubuntu bash
+

@@ -32,6 +32,7 @@ function webChannel(rome, token){
 
 
 function start_exec_cli(){
+
 	var hosts = new Array();
 	$("#hosts-list").children().each(function(){
 		hosts.push($(this).attr("name"));
@@ -78,7 +79,7 @@ function confirm_select_cli_host(){
 
 function getCliHosts(target){
 
-	var id = target.id
+	var id = target.id;
 	if (id == "btn-select-hosts") {
 		$("#page-1").addClass("active");
 	}

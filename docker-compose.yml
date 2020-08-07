@@ -1,0 +1,25 @@
+version: '3'
+services:
+  web:
+    image: registry.cn-hangzhou.aliyuncs.com/xyd-2020/ubuntu:v0807
+    ports:
+      - "8000:8000"
+    command: python3 /www/itauto/manage.py runserver 0.0.0.0:8000
+    working_dir: /www/itauto
+    volumes:
+      - /home/xuyuandong/workspace/github/itauto:/www/itauto
+    links:
+      - "db:database"
+    # environment:
+      # FLASK_ENV: development
+  db:
+    image: registry.cn-hangzhou.aliyuncs.com/xyd-2020/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin@12345
+      
