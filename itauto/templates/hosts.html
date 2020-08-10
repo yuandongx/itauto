@@ -6,7 +6,7 @@
 			<!-- MAIN CONTENT -->
 			<div class="main-content">
 				<!-- 按钮：用于打开模态框 -->
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal1">
+				<button type="button" class="btn btn-primary" data-toggle="modal" onclick="add_host();">
 				  新增主机
 				</button>
 				 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal2">
@@ -80,21 +80,20 @@
 				 
 					  <!-- 模态框主体 -->
 					  <div class="modal-body">
-						
-						
+						<div class="card bg-primary" id="card1">
+						<div class="card-body">
 						<!-- INPUT GROUPS -->
 							<div class="panel">
 								<div class="panel-body">
 									<div class="input-group">
 										<span class="input-group-addon">主机类别</span>
-										<select class="form-control" name="host_type">
-										<option value="unbuntu-web">unbuntu-web</option>
-										<option value="centos">centos</option>
-										<option value="unbuntu">unbuntu</option>
-										<option value="fw-asa">fw-asa</option>
-										<option value="fw-topsec">fw-topsec</option>
-										<option value="sw-huawei">sw-huawei</option>
-									</select>
+											<select class="form-control selectpicker show-tick" title="请选主机类别" name="card1_select_tye_name">
+												<option data-content="<span class='label label-success'>广东省</span>">广东省</option>    
+												<option data-content="<span class='label label-info'>广西省</span>">广西省</option>  
+												<option data-icon="glyphicon glyphicon-plus">添加新类型</option>
+											</select>
+											<button type="button" class="btn btn-default" onclick="add_new_type();"><i class="glyphicon glyphicon-plus"></i>&nbsp; 自定义类型</button>
+											<!-- <button type="button" class="btn btn-outline-primary input-group-addon" id="add-new-type"><i class="glyphicon glyphicon-plus"></i>自定义类型</button> -->
 									</div>
 									<br>
 									<div class="input-group">
@@ -117,17 +116,54 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						</div>
 							<!-- END INPUT GROUPS -->
-						
-						
-					  </div>
-					  <!-- 模态框底部 -->
+							<div class="card bg-primary" id="card2">
+								<div class="card-body">
+									<div class="panel">
+										<div class="panel-body">
+											<div class="input-group">
+												<span class="input-group-addon">主类别</span>
+													<select class="form-control selectpicker show-tick" title="请选主类别" onchange="card2_select_change();" id="card2-select" name="card2_select_tye_name">
+														<option data-content="<span class='label label-success'>广东省</span>">广东省</option>    
+														<option data-content="<span class='label label-info'>广西省</span>">广西省</option>  
+														<option data-icon="glyphicon glyphicon-plus" value="new-type">新增</option>
+													</select>
+											</div>
+											<br>
+											<div class="input-group">
+												<span class="input-group-addon">子类别名称</span>
+												<input class="form-control" type="text" id="sub_type_name">
+											</div>
+										</div>
+									</div>
+							</div>
+							</div>
+							<div class="card bg-primary" id="card3">
+								<div class="card-body">
+									<div class="panel">
+										<div class="panel-body">
+											<div class="input-group">
+												<span class="input-group-addon">类别名称</span>
+												<input class="form-control" type="text" id="new_type_name">
+											</div>
+											<br>
+											<div class="input-group">
+												<span class="input-group-addon">子类别名称</span>
+												<input class="form-control" type="text" id="sub_type_name">
+											</div>
+										</div>
+									</div>
+							</div>
+							</div>
+
+					</div><!-- 模态框底部 -->
 					  <div class="modal-footer">
-						<button type="submit" class="btn btn-secondary" >提交</button>
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-					  </div>
-				 
-				  </form>
+						<button type="submit" id="id-btn-modal1-submit" class="btn btn-secondary" >提交</button>
+						<button type="button" id="id-btn-modal1-cancel" class="btn btn-secondary" onclick="modal1_btn_cnacel_click();">取消</button>
+					</div>
+				</form>
 					</div>
 				  </div>
 				</div>
@@ -157,7 +193,7 @@
 					  <!-- 模态框底部 -->
 					  <div class="modal-footer">
 						<button type="submit" class="btn btn-secondary">上传</button>
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" >取消</button>
 					  </div>
 					</form>
 					</div>
@@ -166,10 +202,96 @@
 				<!-- 模态框2end -->
 				
 				
-				
 			</div>
 			<!-- END MAIN CONTENT -->
 		</div>
 		<!-- END MAIN -->
+<script>
+function add_host(){
+	$("#Modal1").modal('toggle');
+	$("#id-btn-modal1-submit").prop("type", "submit");
+	$("#card1").show();
+	$("#card3").hide();
+	$("#card2").hide();
+}
+function add_new_type(){
+	$("#card1").hide();
+	$("#card2").show();
+	$("#card3").hide();
+	$("#id-btn-modal1-submit").prop("type", "button");
+	$("#id-btn-modal1-cancel").text("上一步");
+}
+function card2_select_change(){
+	var selectList = document.getElementById("card2-select");
+	var selValue=selectList.options[selectList.selectedIndex].value;
+	<!-- console.log(selValue); -->
+	if (selValue == "new-type") {
+		$("#card1").hide();
+		$("#card2").hide();
+		$("#card3").show();
+	}
+	$("#id-btn-modal1-submit").prop("type", "button");
+	$("#id-btn-modal1-cancel").text("上一步");
+	console.log(document.getElementById('card1').style.display);
+	console.log(document.getElementById('card2').style.display);
+	console.log(document.getElementById('card3').style.display);
+}
+function modal1_btn_cnacel_click(){
+	if (document.getElementById('card3').style.display != "none"){
+		document.getElementById('new_type_name').value="";
+		document.getElementById('sub_type_name').value="";
+		$("#card1").hide();
+		$("#card2").show();
+		$("#card3").hide();
+	}
+	else if (document.getElementById('card2').style.display != "none"){
+		<!-- document.getElementById('new_type_name').value=""; -->
+		document.getElementById('sub_type_name').value="";
+		$("#card1").show();
+		$("#card2").hide();
+		$("#card3").hide();
+		$("#id-btn-modal1-submit").prop("type", "submit");
+		$("#id-btn-modal1-cancel").text("取消");
+	}
+	else if (document.getElementById('card1').style.display != "none"){
+		$("#Modal1").modal('toggle');
+	}
+}
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
+function submit_host_type(){
+	 $.ajax({
+			url : "/host",
+			type : "POST",
+			data : $(this).serialize(),
+			headers: {
+				"X-CSRFToken": getCookie("csrftoken") 
+			},
+			success : function(data) {
+				console.info(data);
+				$('.modal .fade').modal("hide");
+			},
+			error : function(data) {
+				console.warn(data);
+				$('.modal .fade').modal("hide");
+			}
+		});
+ 
+		return false;
+}
+</script>
 {% endblock %}

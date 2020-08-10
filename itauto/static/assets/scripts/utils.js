@@ -220,3 +220,7 @@ function postModalData(){
 		$('#Modal1').modal('hide');
             return false;
 }
+
+function submit_host_type(){
+	
+}
