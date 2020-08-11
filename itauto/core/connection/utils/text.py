@@ -34,9 +34,6 @@
 """
 import codecs
 
-from six import PY3, text_type, binary_type
-
-
 try:
     codecs.lookup_error('surrogateescape')
     HAS_SURROGATEESCAPE = True
@@ -113,7 +110,7 @@ def to_bytes(obj, encoding='utf-8', errors=None, nonstring='simplerepr'):
 
         Added the ``surrogate_then_replace`` error handler and made it the default error handler.
     """
-    if isinstance(obj, binary_type):
+    if isinstance(obj, bytes):
         return obj
 
     # We're given a text string
@@ -127,7 +124,7 @@ def to_bytes(obj, encoding='utf-8', errors=None, nonstring='simplerepr'):
         else:
             errors = 'replace'
 
-    if isinstance(obj, text_type):
+    if isinstance(obj, str):
         try:
             # Try this first as it's the fastest
             return obj.encode(encoding, errors)
@@ -217,7 +214,7 @@ def to_text(obj, encoding='utf-8', errors=None, nonstring='simplerepr'):
 
         Added the surrogate_then_replace error handler and made it the default error handler.
     """
-    if isinstance(obj, text_type):
+    if isinstance(obj, str):
         return obj
 
     if errors in _COMPOSED_ERROR_HANDLERS:
@@ -228,7 +225,7 @@ def to_text(obj, encoding='utf-8', errors=None, nonstring='simplerepr'):
         else:
             errors = 'replace'
 
-    if isinstance(obj, binary_type):
+    if isinstance(obj, bytes):
         # Note: We don't need special handling for surrogate_then_replace
         # because all bytes will either be made into surrogates or are valid
         # to decode.
