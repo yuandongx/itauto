@@ -125,10 +125,10 @@
 										<div class="panel-body">
 											<div class="input-group">
 												<span class="input-group-addon">主类别</span>
-													<select class="form-control selectpicker show-tick" title="请选主类别" onchange="card2_select_change();" id="card2-select" name="card2_select_tye_name">
+													<select class="form-control selectpicker show-tick" onchange="card2_new_onclick();" title="请选主类别" id="card2-select" name="card2_select_tye_name">
 														<option data-content="<span class='label label-success'>广东省</span>">广东省</option>    
 														<option data-content="<span class='label label-info'>广西省</span>">广西省</option>  
-														<option data-icon="glyphicon glyphicon-plus" value="new-type">新增</option>
+														<option data-icon="glyphicon glyphicon-plus" value="new-type" >新增</option>
 													</select>
 											</div>
 											<br>
@@ -220,11 +220,11 @@ function add_new_type(){
 	$("#card3").hide();
 	$("#id-btn-modal1-submit").prop("type", "button");
 	$("#id-btn-modal1-cancel").text("上一步");
+	document.getElementById('card2-select').selectedIndex = 0;
 }
-function card2_select_change(){
+function card2_new_onclick(){
 	var selectList = document.getElementById("card2-select");
 	var selValue=selectList.options[selectList.selectedIndex].value;
-	<!-- console.log(selValue); -->
 	if (selValue == "new-type") {
 		$("#card1").hide();
 		$("#card2").hide();
@@ -232,9 +232,6 @@ function card2_select_change(){
 	}
 	$("#id-btn-modal1-submit").prop("type", "button");
 	$("#id-btn-modal1-cancel").text("上一步");
-	console.log(document.getElementById('card1').style.display);
-	console.log(document.getElementById('card2').style.display);
-	console.log(document.getElementById('card3').style.display);
 }
 function modal1_btn_cnacel_click(){
 	if (document.getElementById('card3').style.display != "none"){
@@ -243,9 +240,9 @@ function modal1_btn_cnacel_click(){
 		$("#card1").hide();
 		$("#card2").show();
 		$("#card3").hide();
+		document.getElementById('card2-select').selectedIndex = 0;
 	}
 	else if (document.getElementById('card2').style.display != "none"){
-		<!-- document.getElementById('new_type_name').value=""; -->
 		document.getElementById('sub_type_name').value="";
 		$("#card1").show();
 		$("#card2").hide();
