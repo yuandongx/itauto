@@ -18,8 +18,7 @@ class HostsView(View):
         return render(self.request, self.template_name, {'page_obj': page_obj})
 
     def post(self, request):
-        # if request.POST:
-        log.info(str(request.POST));
+
         host = Hosts(
             host_type = request.POST['host_type'],
             host_name = request.POST['host_name'],
@@ -28,25 +27,19 @@ class HostsView(View):
             host_ip = request.POST['host_ip'],
             passwd = request.POST['passwd'],
             )
-
         host.save()
-            # messages.add_message(request, messages.ERROR, 'Save failed.')
         messages.add_message(request, messages.SUCCESS, 'Save successed.')
         return HttpResponseRedirect(reverse('hosts'))
 
 
 class HostTypeView(View):
     def post(self, request):
-        # if request.POST:
-        log.info(str(request.POST));
         host_type = request.POST['type']
         host_sub_type = request.POST['sub_type']
         type_id = f"{host_type}@{host_sub_type}"
         hosttype = HostType(host_type=host_type, host_sub_type=host_sub_type, type_id=type_id)
         hosttype.save()
-        # messages.add_message(request, messages.ERROR, 'Save failed.')
-        messages.add_message(request, messages.SUCCESS, 'Save successed.')
-        return JsonResponse({"save": "successed"})
+        return JsonResponse({"msg": "successedddd"})
     def get(self, request):
         types = HostType.objects.all()
         return JsonResponse(types)

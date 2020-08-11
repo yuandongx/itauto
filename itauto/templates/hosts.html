@@ -75,7 +75,7 @@
 						{% csrf_token %}
 					  <!-- 模态框头部 -->
 					  <div class="modal-header">
-						<h4 class="modal-title">新增主机</h4>
+						<h4 class="modal-title" id="new-host">新增主机</h4>
 					  </div>
 				 
 					  <!-- 模态框主体 -->
@@ -157,6 +157,19 @@
 									</div>
 							</div>
 							</div>
+							<div class="card" id="card4" style="display: none">
+								<div class="card-body">
+										<!-- <div class="panel-body"> -->
+											<div class="sufee-alert alert with-close alert-success alert-dismissible show">
+												<span class="badge badge-pill badge-success">成功</span>
+													新增类型成功
+												<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+										<!-- </div> -->
+								</div>
+							</div>
 
 					</div><!-- 模态框底部 -->
 					  <div class="modal-footer">
@@ -211,6 +224,7 @@ function add_host(){
 	$("#Modal1").modal('toggle');
 	$("#id-btn-modal1-submit").prop("type", "submit");
 	$("#card1").show();
+	$("#new-host").text("新增主机");
 	$("#card3").hide();
 	$("#card2").hide();
 }
@@ -218,6 +232,7 @@ function add_new_type(){
 	$("#card1").hide();
 	$("#card2").show();
 	$("#card3").hide();
+	$("#new-host").text("新增主机-类型");
 	$("#id-btn-modal1-submit").prop("type", "button");
 	$("#id-btn-modal1-cancel").text("上一步");
 	document.getElementById('card2-select').selectedIndex = 0;
@@ -232,6 +247,7 @@ function card2_new_onclick(){
 		$("#card1").hide();
 		$("#card2").hide();
 		$("#card3").show();
+		$("#new-host").text("新增主机-类型");
 	}
 	$("#id-btn-modal1-submit").prop("type", "button");
 	$("#id-btn-modal1-cancel").text("上一步");
@@ -243,6 +259,7 @@ function modal1_btn_cnacel_click(){
 		document.getElementById('sub_type_name_2').value="";
 		$("#card1").hide();
 		$("#card2").show();
+		$("#new-host").text("新增主机-类型");
 		$("#card3").hide();
 		document.getElementById('card2-select').selectedIndex = 0;
 		$('#card2-select').selectpicker('render');
@@ -252,6 +269,7 @@ function modal1_btn_cnacel_click(){
 		document.getElementById('sub_type_name_1').value="";
 		document.getElementById('sub_type_name_2').value="";
 		$("#card1").show();
+		$("#new-host").text("新增主机");
 		$("#card2").hide();
 		$("#card3").hide();
 		$("#id-btn-modal1-submit").prop("type", "submit");
@@ -302,11 +320,36 @@ function submit_host_type(){
 			},
 			success : function(data) {
 				console.info(data);
-				$('.modal .fade').modal("hide");
+				$('#card3').hide();
+				$('#card2').hide();
+				$('#card4').show();
+				$("#new-host").text("新增主机-类型");
+				if (data.msg == "successed") {
+					$(".alert-dismissible").removeClass("alert-danger")
+					$(".alert-dismissible").addClass("alert-success")
+					$(".badge-pill").removeClass("badge-danger")
+					$(".badge-pill").addClass("badge-success")
+					$('#card4').fadeOut(3000, function(){
+						$('#card4').hide();
+						$('#card1').show();
+						$("#new-host").text("新增主机");
+						$("#id-btn-modal1-submit").prop("type", "submit");
+						$("#id-btn-modal1-cancel").text("取消");
+					});
+				} else {
+					$(".alert-dismissible").removeClass("alert-success")
+					$(".alert-dismissible").addClass("alert-danger")
+					$(".badge-pill").removeClass("badge-success")
+					$(".badge-pill").addClass("badge-danger")
+					$('#card4').fadeOut(3000, function(){
+						$('#card4').hide();
+						$('#card2').show();
+						$("#new-host").text("新增主机-类型");
+					});
+				}
 			},
 			error : function(data) {
 				console.warn(data);
-				$('.modal .fade').modal("hide");
 			}
 		});
  
