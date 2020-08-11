@@ -134,7 +134,7 @@
 											<br>
 											<div class="input-group">
 												<span class="input-group-addon">子类别名称</span>
-												<input class="form-control" type="text" id="sub_type_name">
+												<input class="form-control" type="text" id="sub_type_name_1">
 											</div>
 										</div>
 									</div>
@@ -151,7 +151,7 @@
 											<br>
 											<div class="input-group">
 												<span class="input-group-addon">子类别名称</span>
-												<input class="form-control" type="text" id="sub_type_name">
+												<input class="form-control" type="text" id="sub_type_name_2">
 											</div>
 										</div>
 									</div>
@@ -221,6 +221,9 @@ function add_new_type(){
 	$("#id-btn-modal1-submit").prop("type", "button");
 	$("#id-btn-modal1-cancel").text("上一步");
 	document.getElementById('card2-select').selectedIndex = 0;
+	$('#card2-select').selectpicker('render');
+	document.getElementById("id-btn-modal1-submit").addEventListener("click", submit_host_type, true);
+
 }
 function card2_new_onclick(){
 	var selectList = document.getElementById("card2-select");
@@ -236,19 +239,24 @@ function card2_new_onclick(){
 function modal1_btn_cnacel_click(){
 	if (document.getElementById('card3').style.display != "none"){
 		document.getElementById('new_type_name').value="";
-		document.getElementById('sub_type_name').value="";
+		document.getElementById('sub_type_name_1').value="";
+		document.getElementById('sub_type_name_2').value="";
 		$("#card1").hide();
 		$("#card2").show();
 		$("#card3").hide();
 		document.getElementById('card2-select').selectedIndex = 0;
+		$('#card2-select').selectpicker('render');
+
 	}
 	else if (document.getElementById('card2').style.display != "none"){
-		document.getElementById('sub_type_name').value="";
+		document.getElementById('sub_type_name_1').value="";
+		document.getElementById('sub_type_name_2').value="";
 		$("#card1").show();
 		$("#card2").hide();
 		$("#card3").hide();
 		$("#id-btn-modal1-submit").prop("type", "submit");
 		$("#id-btn-modal1-cancel").text("取消");
+		document.getElementById("id-btn-modal1-submit").removeEventListener("click", submit_host_type);
 	}
 	else if (document.getElementById('card1').style.display != "none"){
 		$("#Modal1").modal('toggle');
@@ -271,10 +279,24 @@ function getCookie(name) {
 }
 
 function submit_host_type(){
-	 $.ajax({
-			url : "/host",
+	var data = new Object();
+	var selectList = document.getElementById("card2-select");
+	var selValue=selectList.options[selectList.selectedIndex].value;
+	if (document.getElementById('card2').style.display != "none"){
+		if (selectList.selectedIndex != 0 && selValue != "new-type") {
+			data.type = selValue;
+		}
+		if ($("#sub_type_name_1").val() != ""){
+			data.sub_type = $("#sub_type_name_1").val()
+		}
+	} else if (document.getElementById('card3').style.display != "none") {
+		data.type = $("#new_type_name").val();
+		data.sub_type = $("#sub_type_name_2").val()
+	}
+	$.ajax({
+			url : "/hosts/type",
 			type : "POST",
-			data : $(this).serialize(),
+			data : data,
 			headers: {
 				"X-CSRFToken": getCookie("csrftoken") 
 			},

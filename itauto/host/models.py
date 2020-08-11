@@ -9,5 +9,7 @@ class Hosts(models.Model):
     host_ip = models.GenericIPAddressField()
     passwd = models.CharField(max_length=50)
 
-class HType(models.Model):
-    htype = models.CharField(max_length=50, primary_key=True)
+class HostType(models.Model):
+    type_id = models.CharField(primary_key=True, max_length=110)
+    host_type = models.CharField(max_length=50)
+    host_sub_type = models.CharField(max_length=50)
