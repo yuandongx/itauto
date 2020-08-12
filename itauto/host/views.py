@@ -15,6 +15,13 @@ class HostsView(View):
         paginator = Paginator(hosts_list, 10) # Show 25 contacts per page.
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        types = HostType.objects.all()
+        # hosttypes = {}
+        # for t in types:
+            # if t.host_type in hosttype:
+                # hosttype[t.host_type].append(t.host_sub_type)
+            # else:
+                # hosttype[t.host_type] = [t.host_sub_type]
         return render(self.request, self.template_name, {'page_obj': page_obj})
 
     def post(self, request):
