@@ -17,8 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from ui import views
 urlpatterns = [
-    path("hosts/", include("host.urls")),
-    path("tasks/", include("task.urls")),
+    path("hosts/", include("ui.urls")),
+    path("tasks/", include("ui.urls")),
     path("home", views.home, name="home"),
     path("template", views.template, name="template"),
     path("", views.template, name="apps-deploy"),

@@ -31,10 +31,8 @@ ALLOWED_HOSTS = ["192.168.56.101", "192.168.56.102", "127.0.0.1"]
 
 
 INSTALLED_APPS = [
-    "ui",
-    "core",
-    "task",
-    "host",
+    "web",
+    "lib",
     "channels",
     'django.contrib.admin',
     'django.contrib.auth',
