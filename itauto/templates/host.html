@@ -1,0 +1,173 @@
+<div class="container-fluid">
+<div class="panel panel-default">
+  <div class="panel-body">
+    Basic panel example
+  </div>
+</div>
+<!-- RECENT PURCHASES -->
+<div class="panel">
+	<div class="panel-heading">
+		<h3 class="panel-title">Recent Purchases</h3>
+		<!-- <div class="right"> -->
+			<!-- <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button> -->
+			<!-- <button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button> -->
+		<!-- </div> -->
+	</div>
+	<div class="panel-body no-padding">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Order No.</th>
+					<th>Name</th>
+					<th>Amount</th>
+					<th>Date &amp; Time</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><a href="#">763648</a></td>
+					<td>Steve</td>
+					<td>$122</td>
+					<td>Oct 21, 2016</td>
+					<td><span class="label label-success">COMPLETED</span></td>
+				</tr>
+				<tr>
+					<td><a href="#">763649</a></td>
+					<td>Amber</td>
+					<td>$62</td>
+					<td>Oct 21, 2016</td>
+					<td><span class="label label-warning">PENDING</span></td>
+				</tr>
+				<tr>
+					<td><a href="#">763650</a></td>
+					<td>Michael</td>
+					<td>$34</td>
+					<td>Oct 18, 2016</td>
+					<td><span class="label label-danger">FAILED</span></td>
+				</tr>
+				<tr>
+					<td><a href="#">763651</a></td>
+					<td>Roger</td>
+					<td>$186</td>
+					<td>Oct 17, 2016</td>
+					<td><span class="label label-success">SUCCESS</span></td>
+				</tr>
+				<tr>
+					<td><a href="#">763652</a></td>
+					<td>Smith</td>
+					<td>$362</td>
+					<td>Oct 16, 2016</td>
+					<td><span class="label label-success">SUCCESS</span></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="panel-footer">
+		<div class="row">
+			<div class="col-md-6"><span class="panel-note"><i class="fa fa-clock-o"></i> Last 24 hours</span></div>
+			<div class="col-md-6 text-right">
+				<a href="#" class="btn btn-primary" onclick="$('#Modal1').modal('toggle');">新加主机</a>
+				<a href="#" class="btn btn-primary" onclick="$('#Modal2').modal('toggle');">批量导入</a>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END RECENT PURCHASES -->
+</div>
+
+<!-- 模态框1 -->
+<div class="modal fade" id="Modal1">
+
+  <div class="modal-dialog">
+	<div class="modal-content">
+	<form action="/host/" method="post">
+		{% csrf_token %}
+	  <!-- 模态框头部 -->
+	  <div class="modal-header">
+		<h4 class="modal-title">新增主机</h4>
+	  </div>
+ 
+	  <!-- 模态框主体 -->
+	  <div class="modal-body">
+		<!-- INPUT GROUPS -->
+			<div class="panel">
+				<div class="panel-body">
+					<div class="input-group">
+						<span class="input-group-addon">主机类别</span>
+						<select class="form-control" name="host_type">
+						<option value="unbuntu-web">unbuntu-web</option>
+						<option value="centos">centos</option>
+						<option value="unbuntu">unbuntu</option>
+						<option value="fw-asa">fw-asa</option>
+						<option value="fw-topsec">fw-topsec</option>
+						<option value="sw-huawei">sw-huawei</option>
+					</select>
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">主机名</span>
+						<input class="form-control" type="text" name="host_name">
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">ssh</span>
+						<input class="form-control" type="text" name="host_ip">
+						<span class="input-group-addon">端口</span>
+						<input class="form-control" type="text" value="22" name="host_port">
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">用户名:</span>
+						<input class="form-control" type="text" name="user_name" >
+						<span class="input-group-addon">密码:</span>
+						<input class="form-control" type="text" name="passwd">
+					</div>
+				</div>
+			</div>
+			<!-- END INPUT GROUPS -->
+		
+		
+	  </div>
+	  <!-- 模态框底部 -->
+	  <div class="modal-footer">
+		<button type="submit" class="btn btn-secondary" >提交</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+	  </div>
+ 
+  </form>
+	</div>
+  </div>
+</div>
+<!-- 模态框1 end -->
+<!-- 模态框2 -->
+<div class="modal fade" id="Modal2">
+  <div class="modal-dialog">
+	<div class="modal-content">
+ 
+	  <!-- 模态框头部 -->
+	  <div class="modal-header">
+		<h4 class="modal-title">模板批量导入</h4>
+		<button type="button" class="close" data-dismiss="modal">&times;</button>
+	  </div>
+ 
+	  <!-- 模态框主体 -->
+	  <form action="/upload-hosts-file" method="post" enctype="multipart/form-data">
+	  <div class="modal-body">
+		<div class="list-group">
+		<div class="cell list-group-item"><a href="/download-template">下载模板</a> </div>
+		<div class="cell list-group-item"><input type="file"/> </div>
+		<div>
+	  </div>
+	  <!-- 模态框底部 -->
+	  <div class="modal-footer">
+		<button type="submit" class="btn btn-secondary">上传</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+	  </div>
+	</form>
+	</div>
+  </div>
+</div>
+<!-- 模态框2end -->
+{% load static %}
+<script src="{% static "assets/scripts/utils.js" %}" ></script>

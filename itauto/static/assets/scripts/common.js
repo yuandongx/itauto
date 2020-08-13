@@ -4,14 +4,28 @@ $(document).ready(function() {
 	/*NAVIGATION  a href
 	/*----------------------------------*/
 
-	$("a").each(function(){
-			if ($(this).attr("href") == window.location.pathname){
-				$(this).addClass("active");
-				var parent = $(this).parent().parent().parent();
-				if (parent.hasClass("collapse")){
-					parent.addClass("in")
+	$("#left-memu").find("a").each(function(){
+			$(this).click(function(){
+				if ($(this).attr("name") != undefined){
+					var url = "/" + $(this).attr("name").replace("-", "/") + "/";
+					$(".main-content").load(url, function(responseTxt,statusTxt,xhr){
+						console.log(responseTxt);
+						console.log(statusTxt);
+						console.log(xhr);
+						if (statusTxt == "success") {
+							$(".main-content").empty().html(responseTxt);
+						} else {
+							$(".main-content").empty().html("<p>糟糕,页面走丢了......</p>");
+						}
+					});
 				}
-			}
+				$("#left-memu").find("a").each(function(){
+					if($(this).hasClass("active")){
+						$(this).removeClass("active");
+					}
+				});
+				$(this).addClass("active");
+			});
 	});
 
 	$("div.alert").each(function(){
