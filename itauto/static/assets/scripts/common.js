@@ -9,9 +9,9 @@ $(document).ready(function() {
 				if ($(this).attr("name") != undefined){
 					var url = "/" + $(this).attr("name").replace("-", "/") + "/";
 					$(".main-content").load(url, function(responseTxt,statusTxt,xhr){
-						console.log(responseTxt);
-						console.log(statusTxt);
-						console.log(xhr);
+						// console.log(responseTxt);
+						// console.log(statusTxt);
+						// console.log(xhr);
 						if (statusTxt == "success") {
 							$(".main-content").empty().html(responseTxt);
 						} else {

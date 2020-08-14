@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
 from django.views import View
@@ -26,19 +26,18 @@ class HostView(View):
 
     def post(self, request):
 
-        host = Hosts(
-            host_type = request.POST['host_type'],
+        host = Host(
+            host_type = request.POST.get("host_type") or "linux",
             host_name = request.POST['host_name'],
             user_name = request.POST['user_name'],
-            host_port = request.POST['host_port'],
+            host_port = request.POST.get("host_port") or 22,
             host_ip = request.POST['host_ip'],
-            passwd = request.POST['passwd'],
+            # passwd = request.POST['passwd'],
             )
         host.save()
         messages.add_message(request, messages.SUCCESS, 'Save successed.')
-        return HttpResponseRedirect(reverse('hosts'))
-        
-        
+        return redirect("/host/")
+
 class HostTypeView(View):
     def post(self, request):
         host_type = request.POST['type']

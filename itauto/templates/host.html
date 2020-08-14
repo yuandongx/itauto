@@ -67,8 +67,8 @@
 		<div class="row">
 			<div class="col-md-6"><span class="panel-note"><i class="fa fa-clock-o"></i> Last 24 hours</span></div>
 			<div class="col-md-6 text-right">
-				<a href="#" class="btn btn-primary" onclick="$('#Modal1').modal('toggle');">新加主机</a>
-				<a href="#" class="btn btn-primary" onclick="$('#Modal2').modal('toggle');">批量导入</a>
+				<a href="#" class="btn btn-primary" id="a-add-new-host">新加主机</a>
+				<a href="#" id="a-import-host" class="btn btn-primary">批量导入</a>
 			</div>
 		</div>
 	</div>
@@ -77,67 +77,119 @@
 </div>
 
 <!-- 模态框1 -->
-<div class="modal fade" id="Modal1">
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="Modal1">
 
-  <div class="modal-dialog">
+<div class="modal-dialog">
 	<div class="modal-content">
-	<form action="/host/" method="post">
+	<form action="/host/" method="post" id="add-host">
 		{% csrf_token %}
 	  <!-- 模态框头部 -->
 	  <div class="modal-header">
 		<h4 class="modal-title">新增主机</h4>
 	  </div>
- 
 	  <!-- 模态框主体 -->
 	  <div class="modal-body">
+		<section class="card" id="section-edit-host">
+		<div class="card-body">
 		<!-- INPUT GROUPS -->
-			<div class="panel">
-				<div class="panel-body">
-					<div class="input-group">
-						<span class="input-group-addon">主机类别</span>
-						<select class="form-control" name="host_type">
-						<option value="unbuntu-web">unbuntu-web</option>
-						<option value="centos">centos</option>
-						<option value="unbuntu">unbuntu</option>
-						<option value="fw-asa">fw-asa</option>
-						<option value="fw-topsec">fw-topsec</option>
-						<option value="sw-huawei">sw-huawei</option>
-					</select>
-					</div>
-					<br>
-					<div class="input-group">
-						<span class="input-group-addon">主机名</span>
-						<input class="form-control" type="text" name="host_name">
-					</div>
-					<br>
-					<div class="input-group">
-						<span class="input-group-addon">ssh</span>
-						<input class="form-control" type="text" name="host_ip">
-						<span class="input-group-addon">端口</span>
-						<input class="form-control" type="text" value="22" name="host_port">
-					</div>
-					<br>
-					<div class="input-group">
-						<span class="input-group-addon">用户名:</span>
-						<input class="form-control" type="text" name="user_name" >
-						<span class="input-group-addon">密码:</span>
-						<input class="form-control" type="text" name="passwd">
+			<div class="row top">
+				<div class="col-md-6">
+				<div class="input-group">
+					<span class="input-group-addon" id="basic-addon1">主机类别</span>
+					<input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+				</div>
+				</div>
+				<div class="col-md-2"><a class="text-center aoffset" id="edit-host-type">编辑类别 </a></div>
+				<!-- <div class="col-md-2"><a class="text-center aoffset"> 修改类别 </a></div> -->
+			</div>
+			<div class="row top">
+				<div class="col-md-10">
+					<div  class="input-group">
+						<span class="input-group-addon" >主机名称</span>
+						<input type="text" name="host_name" class="form-control" placeholder="主机名称" aria-describedby="basic-addon1"></input>
 					</div>
 				</div>
 			</div>
-			<!-- END INPUT GROUPS -->
-		
-		
-	  </div>
+			<div class="row top">
+				<div class="col-md-4 noffset" style="padding-left: 15px;">
+					<div class="input-group">
+						<span class="input-group-addon" id="sizing-addon2">连接信息</span>
+						<!-- <div class="input-group-btn"> -->
+						<!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ssh<span class="caret"></span></button> -->
+						<!-- <ul class="dropdown-menu"> -->
+							<!-- <li><a href="#">ssh</a></li> -->
+							<!-- <li><a href="#">telnet</a></li> -->
+						<!-- </ul> -->
+					  <!-- </div> -->
+					  <input type="text" name="user_name" class="form-control" aria-label="..." placeholder="root">
+					</div><!-- /input-group -->
+				</div>
+				<div class="col-md-4 noffset">
+					<div class="input-group">
+						<span class="input-group-addon" id="sizing-addon2">@</span>
+						<input type="text" name="host_ip" class="form-control" placeholder="127.0.0.1/hostname" aria-describedby="basic-addon1"></input>
+					</div>
+				</div>
+				<div class="col-md-2 noffset">
+					<div class="input-group">
+						<span class="input-group-addon" id="sizing-addon2">-p</span>
+						<input type="text" name="host_port" class="form-control" placeholder="22" aria-describedby="basic-addon1"></input>
+					</div>
+				</div>
+			</div>
+			<div class="row top">
+				<div class="col-md-10">
+					<div class="input-group">
+						<span class="input-group-addon" id="sizing-addon2">描述信息</span>
+						<textarea type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1"></textarea>
+					</div>
+				</div>
+			</div>
+			</div><!-- card-body -->
+			</section>
+
+		<section class="card" id="section-edit-type">
+			<div class="card-body">
+				<div class="row form-group">
+					<!-- <div class="col col-md-3"> -->
+						<!-- <label for="multiple-select" class="form-control-label">已有主机类别:</label> -->
+					<!-- </div> -->
+					<div class="col col-md-8">
+						<select name="multiple-select" id="multiple-select" multiple="" class="form-control">
+							<option value="1">Option #1</option>
+							<option value="2">Option #2</option>
+							<option value="3">Option #3</option>
+							<option value="4">Option #4</option>
+							<option value="5">Option #5</option>
+							<option value="6">Option #6</option>
+							<option value="7">Option #7</option>
+							<option value="8">Option #8</option>
+							<option value="9">Option #9</option>
+							<option value="10">Option #10</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col col-md-8">
+						<div class="input-group">
+							<span class="input-group-addon" id="basic-addon2">新增类别名</span>
+							<input type="text" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+							<!-- <span class="input-group-addon" id="basic-addon2">@example.com</span> -->
+							<i class="input-group-addon glyphicon glyphicon-plus" id="basic-addon3"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		</div><!-- modal-body -->
 	  <!-- 模态框底部 -->
-	  <div class="modal-footer">
-		<button type="submit" class="btn btn-secondary" >提交</button>
-		<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-	  </div>
- 
-  </form>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" id="btn-submit">提交</button>
+				<button type="button" class="btn btn-secondary" id="btn-cancel" data-dismiss="modal">取消</button>
+			</div>
+		</form>
+		</div>
 	</div>
-  </div>
 </div>
 <!-- 模态框1 end -->
 <!-- 模态框2 -->
@@ -157,7 +209,7 @@
 		<div class="list-group">
 		<div class="cell list-group-item"><a href="/download-template">下载模板</a> </div>
 		<div class="cell list-group-item"><input type="file"/> </div>
-		<div>
+		</div>
 	  </div>
 	  <!-- 模态框底部 -->
 	  <div class="modal-footer">
@@ -169,5 +221,53 @@
   </div>
 </div>
 <!-- 模态框2end -->
-{% load static %}
-<script src="{% static "assets/scripts/utils.js" %}" ></script>
+
+<script >
+$("#a-add-new-host").click(function(){
+	$("#section-edit-type").hide();
+	$("#section-edit-host").show();
+	$("#Modal1").modal("toggle");
+	$("#btn-submit").text("提交");
+});
+$("#edit-host-type").click(function(){
+	$("#section-edit-host").hide();
+	$("#section-edit-type").show();
+	$("#btn-submit").text("确定");
+	<!-- document.getElementById("btn-submit").addEventListener("click", edit_host_type); -->
+});
+$("#btn-submit").click(function(){
+	if ($("#section-edit-host").css("display") != "none"){
+		$("#add-host").submit()
+	}
+	else {
+		$("#section-edit-type").hide();
+		$("#section-edit-host").show();
+		$("#btn-submit").text("提交");
+	}
+});
+$("#import-host").click(function(){
+	$("#Modal2").modal("toggle");
+});
+function onchange_select_type(){
+	var selectList = document.getElementById("select-host-type");
+	var selValue=selectList.options[selectList.selectedIndex].value;
+	if (selValue == "new-type"){
+		document.getElementById('select-host-type').selectedIndex = 0;
+		$('#select-host-type').selectpicker('render');
+	}
+}
+</script>
+<style>
+.top { margin-bottom: 30px; }
+.noffset {
+    position: relative;
+    min-height: 1px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+.aoffset {
+    font-size: 16px;
+    line-height: 2em;
+	text-decoration:underline;
+}
+</style>
