@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
 from django.views import View
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.core.paginator import Paginator
@@ -36,7 +37,7 @@ class HostView(View):
             )
         host.save()
         messages.add_message(request, messages.SUCCESS, 'Save successed.')
-        return redirect("/host/")
+        return HttpResponse("<p>ok</p>")
 
 class HostTypeView(View):
     def post(self, request):

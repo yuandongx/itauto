@@ -1,3 +1,4 @@
+<iframe src="" style="display: none" name="hidden-frame"></iframe>
 <div class="container-fluid">
 <div class="panel panel-default">
   <div class="panel-body">
@@ -81,7 +82,7 @@
 
 <div class="modal-dialog">
 	<div class="modal-content">
-	<form action="/host/" method="post" id="add-host">
+	<form action="/host/" method="post" id="add-host" target="hidden-frame">
 		{% csrf_token %}
 	  <!-- 模态框头部 -->
 	  <div class="modal-header">
@@ -238,6 +239,7 @@ $("#edit-host-type").click(function(){
 $("#btn-submit").click(function(){
 	if ($("#section-edit-host").css("display") != "none"){
 		$("#add-host").submit()
+		$("#Modal1").modal("toggle");
 	}
 	else {
 		$("#section-edit-type").hide();

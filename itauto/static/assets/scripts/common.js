@@ -8,6 +8,7 @@ $(document).ready(function() {
 			$(this).click(function(){
 				if ($(this).attr("name") != undefined){
 					var url = "/" + $(this).attr("name").replace("-", "/") + "/";
+					console.log(url);
 					$(".main-content").load(url, function(responseTxt,statusTxt,xhr){
 						// console.log(responseTxt);
 						// console.log(statusTxt);
