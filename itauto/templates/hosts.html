@@ -7,7 +7,7 @@
 						<p class="demo-button">
 						{% for message in messages %}
 						{% if message.tags %}
-<button type="button" class="btn btn-success btn-toastr" data-context="success" data-message="This is success info" data-position="top-right">Success Info</button>
+						<button type="button" class="btn btn-success btn-toastr" data-context="success" data-message="This is success info" data-position="top-right">Success Info</button>
 						{% endif %}
 						{% endfor %}
 						</p>
@@ -16,15 +16,21 @@
 		<div class="main">
 			<!-- MAIN CONTENT -->
 			<div class="main-content">
-				<!-- 按钮：用于打开模态框 -->
-				<button type="button" class="btn btn-primary" data-toggle="modal" id="btn-modal-dialog-1-show">
-				  新增主机
-				</button>
-				 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal2">
-				  批量导入
-				</button>
+				<div class="panel">
+				<div class="panel-body">
+					<!-- 按钮：用于打开模态框 -->
+					<button type="button" class="btn btn-primary" data-toggle="modal" id="btn-modal-dialog-1-show">
+					  新增主机
+					</button>
+					 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal2">
+					  批量导入
+					</button>
+				</div>
+				</div>
 
-
+				<div class="panel panel-default">
+				<div class="panel-heading"><h4 class="panel-title">主机信息列表</h4></div>
+				<div class="panel-body">
 				<!-- 主机列表 --->
 				<table class="table table-striped">
 					<thead>
@@ -66,7 +72,8 @@
 						</span>
 					</div>
 				<!-- 主机列表 end--->
-				
+				</div>
+				</div>
 				<!-- 模态框1 -->
 				<div class="modal fade" id="Modal1">
 				
