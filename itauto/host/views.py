@@ -32,7 +32,7 @@ class HostsView(View):
             user_name = request.POST['user_name'],
             host_port = request.POST['host_port'],
             host_ip = request.POST['host_ip'],
-            passwd = request.POST['passwd'],
+            # passwd = request.POST['passwd'],
             )
         host.save()
         messages.add_message(request, messages.SUCCESS, 'Save successed.')
