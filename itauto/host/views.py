@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.urls import reverse
 from django.views import View
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.core.paginator import Paginator
@@ -36,7 +37,13 @@ class HostsView(View):
             )
         host.save()
         messages.add_message(request, messages.SUCCESS, 'Save successed.')
-        return HttpResponseRedirect(reverse('hosts'))
+        # return HttpResponseRedirect(reverse('hosts'))
+        respone = HttpResponse()
+        respone.write("""<button type="button"
+                        class="btn btn-success btn-toastr" data-context="success"
+                        data-message="This is success info"
+                        data-position="top-right">Success Info</button>""")
+        return respone
 
 
 class HostTypeView(View):

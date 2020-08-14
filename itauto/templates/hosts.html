@@ -2,17 +2,7 @@
 {% extends "base/base.html" %}
 {% block main %} 
 <!-- MAIN -->
-				{% if messages %}
-					<ul class="messages" >
-						<p class="demo-button">
-						{% for message in messages %}
-						{% if message.tags %}
-						<button type="button" class="btn btn-success btn-toastr" data-context="success" data-message="This is success info" data-position="top-right">Success Info</button>
-						{% endif %}
-						{% endfor %}
-						</p>
-					</ul>
-				{% endif %}
+<iframe name="iframe" style="display:none"></iframe>
 		<div class="main">
 			<!-- MAIN CONTENT -->
 			<div class="main-content">
@@ -79,7 +69,7 @@
 				
 				  <div class="modal-dialog">
 					<div class="modal-content">
-					<form action="/hosts/" method="post" id="form-add-host">
+					<form action="/hosts/" method="post" id="form-add-host" target="iframe">
 						{% csrf_token %}
 					  <!-- 模态框头部 -->
 					  <div class="modal-header">
